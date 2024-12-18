@@ -23,6 +23,7 @@ public:
 	matrix(int r = 0, int c = 0) : row(r), col(c) {} // 默认构造函数
 	matrix(const matrix &other); // 拷贝构造函数
 	matrix& operator=(const matrix &other); // 重载赋值运算符
+	bool operator==(const matrix& other); //重载相等运算符
 	matrix operator+(const matrix& other);// 重载加法运算符
 	matrix operator-(const matrix& other);// 重载减法运算符
 	matrix operator*(const matrix& other);// 重载乘法运算符
@@ -30,6 +31,7 @@ public:
 	~matrix(); // 析构函数
 	
 	void matrix_create(int r = 0, int c = 0);//生成函数（零矩阵）
+	void matrix_create_E (int order);//生成函数（单位矩阵）
 	void matrix_create_1(int order,int i, int j);//生成函数（初等矩阵1）
 	void matrix_create_2(int order,int i, double k);//生成函数（初等矩阵2）
 	void matrix_create_3(int order,int i, int j, double k);//生成函数（初等矩阵3）
@@ -40,10 +42,12 @@ public:
 	void matrix_display(int no_name = 0);//输出函数（输出完整矩阵）（无需存储）
 	
 	matrix matrix_transpose();//转置矩阵
+	matrix matrix_inverse();//逆矩阵 
 	matrix matrix_simplify_1();//化简为行阶梯形矩阵
-	void matrix_simplify_2();
+	matrix matrix_simplify_2();//化简为简化行阶梯形矩阵
 	void matrix_simplify_3();
 	double matrix_det();//行列式 
+	
 	
 };
 

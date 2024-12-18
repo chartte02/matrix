@@ -47,6 +47,16 @@ void matrix::matrix_create_1 (int order, int i, int j) {
     }
 }
 
+// 名称：matrix_create_E 生成函数（单位矩阵）
+// 功能：获得第一类初等矩阵 E(i,j)
+// 参数：order：矩阵阶数 	r,c: r行c列
+void matrix::matrix_create_E (int order) {
+    matrix_create(order, order);
+    for (int i = 0; i < order; i++) {
+        data[i][i] = 1;
+    }
+}
+
 // 名称：matrix_create_2 生成函数（初等矩阵2）
 // 功能：获得第二类初等矩阵 E(i(k))
 // 参数：order: 矩阵阶数  	r:r行 		k: k倍
