@@ -1,159 +1,58 @@
-#ifndef _matrix_h
-#define _matrix_h
+//ÎÄ¼ş£ºmatrix.h
+#ifndef matrix_h
 
+#define matrix_h
 #include <iostream>
-#include <cstring>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <stdexcept>
+#include <cstdlib> 
+#include <ctime>
+#include <iomanip>
+
 using namespace std;
 
 class matrix {
 public:
-    string name;
-    int No;
-    int row, col;
-    double **data;
-	int n;
-    matrix(int r = 0, int c = 0) : row(r), col(c), n(1), No(n - 1) {} // é»˜è®¤æ„é€ å‡½æ•°
-    matrix(const matrix &other); // æ‹·è´æ„é€ å‡½æ•°
-    matrix& operator=(const matrix &other); // èµ‹å€¼è¿ç®—ç¬¦é‡è½½
-    ~matrix(); // ææ„å‡½æ•°
-
-	void Matrix_Create (int row, int col);//ç”Ÿæˆé›¶çŸ©é˜µ
-    void Matrix_Input();//è¾“å…¥å‡½æ•° ï¼ˆäºŒç»´çŸ©é˜µï¼‰
-    void Matrix_Output();//ä¸´æ—¶çš„è¾“å‡ºå‡½æ•°ï¼Œåªèƒ½è¾“å‡ºå®Œæ•´çŸ©é˜µï¼ˆä¸ºäº†debugè¾“å…¥å‡½æ•°ä¸´æ—¶å‡‘å¾—ï¼‰
-    matrix get_Matrix();
-//	double det();
-//    void create(string *s, int row, int col);
-//    void add(const matrix &m1, const matrix &m2);
-//    void sub(const matrix &m1, const matrix &m2);
-//    void multiply(const matrix &m1, const matrix &m2);
-//    void power(const matrix &m1, int k);
-//    void det(const matrix &m1, int n);
-//    void transpose(const matrix &m1);
-//    void display(int row, int col, string *name);
-	void get_matrix_1(int order,int r, int c);
-        void get_matrix_2(int order,int r, int k);
-        void get_matrix_3(int order,int r, int c, int k);
+	string name;//Ãû³Æ 
+	int No;//ĞòºÅ 
+	int row, col;//ĞĞÁĞ 
+	double **data;//ÔªËØ¶şÎ¬Êı×é 
+    
+	matrix(int r = 0, int c = 0) : row(r), col(c) {} // Ä¬ÈÏ¹¹Ôìº¯Êı
+	matrix(const matrix &other); // ¿½±´¹¹Ôìº¯Êı
+	matrix& operator=(const matrix &other); // ÖØÔØ¸³ÖµÔËËã·û
+	matrix operator+(const matrix& other);// ÖØÔØ¼Ó·¨ÔËËã·û
+	matrix operator-(const matrix& other);// ÖØÔØ¼õ·¨ÔËËã·û
+	matrix operator*(const matrix& other);// ÖØÔØ³Ë·¨ÔËËã·û
+	matrix operator^(int k);//ÖØÔØÃİÔËËã·û
+	~matrix(); // Îö¹¹º¯Êı
+	
+	void matrix_create(int r = 0, int c = 0);//Éú³Éº¯Êı£¨Áã¾ØÕó£©
+	void matrix_create_1(int order,int i, int j);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó1£©
+	void matrix_create_2(int order,int i, double k);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó2£©
+	void matrix_create_3(int order,int i, int j, double k);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó3£©
+	void matrix_create_random(int i, int j, double a, double b);//Éú³Éº¯Êı£¨Ëæ»ú¾ØÕó£©
+	
+	void matrix_store(); // ´æ´¢º¯Êı£¨ÈÎÒâ¾ØÕó£©
+	void matrix_input();//ÊäÈëº¯Êı £¨¶şÎ¬¾ØÕó£© 
+	void matrix_display(int no_name = 0);//Êä³öº¯Êı£¨Êä³öÍêÕû¾ØÕó£©£¨ÎŞĞè´æ´¢£©
+	
+	matrix matrix_transpose();//×ªÖÃ¾ØÕó
+	matrix matrix_simplify_1();//»¯¼òÎªĞĞ½×ÌİĞÎ¾ØÕó
+	void matrix_simplify_2();
+	void matrix_simplify_3();
+	double matrix_det();//ĞĞÁĞÊ½ 
+	
 };
 
-matrix list[100];
-
-// æ‹·è´æ„é€ å‡½æ•°
-matrix::matrix(const matrix &other) {
-    // åˆ†é…æ–°çš„å†…å­˜
-	data = new double*[row];
-    if (!data) {
-    	cout << "å†…å­˜å·²æ»¡ï¼Œæ— æ³•æ–°å»ºçŸ©é˜µ" << endl;
-		return;
-	}
-
-	name = other.name;
-    row = other.row;
-    col = other.col;
-
-    for (int i = 0; i < row; i++) {
-        data[i] = new double[col];
-        for (int j = 0; j < col; j++) {
-            data[i][j] = other.data[i][j]; // å¤åˆ¶æ•°æ®
-        }
-    }
-}
-
-// èµ‹å€¼è¿ç®—ç¬¦é‡è½½ï¼ˆæ›¾æŸæŸ¥è¯¢äº†11ç« çš„èµ„æ–™ï¼Œå¤§å®¶ä¹ŸæŸ¥ä¸€ä¸‹å§ï¼Œè¿™é‡Œè§£é‡Šä¸æ¸…æ¥šï¼‰
-matrix& matrix::operator=(const matrix &other) {
-    if (this != &other) { // é˜²æ­¢è‡ªæˆ‘èµ‹å€¼
-        // é‡Šæ”¾æ—§çš„å†…å­˜
-        for (int i = 0; i < row; i++) {
-            delete[] data[i];
-        }
-        delete[] data;
-
-        // å¤åˆ¶æ•°æ®
-        row = other.row;
-        col = other.col;
-
-        // åˆ†é…æ–°çš„å†…å­˜
-        data = new double*[row];
-        for (int i = 0; i < row; i++) {
-            data[i] = new double[col];
-            for (int j = 0; j < col; j++) {
-                data[i][j] = other.data[i][j];
-            }
-        }
-    }
-    return *this;
-}
-
-// ææ„å‡½æ•°
-matrix::~matrix() {
-    for (int i = 0; i < row; i++) {
-        delete[] data[i];
-    }
-    delete[] data;
-}
-
-// åç§°ï¼šMatrix_Create ç”Ÿæˆå‡½æ•°ï¼ˆé›¶çŸ©é˜µï¼‰
-// ä½œç”¨ï¼šç”Ÿæˆå·²çŸ¥è¡Œå’Œåˆ—çš„é›¶çŸ©é˜µ
-// å‚æ•°ï¼šè¡Œï¼Œåˆ—
-void matrix::Matrix_Create(int row, int col){
-	data = new double *[row];//ç”³è¯·rowä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-	if (!data) {
-    	cout << "å†…å­˜å·²æ»¡ï¼Œæ— æ³•æ–°å»ºçŸ©é˜µ" << endl;
-		return;
-	}
-	for (int i = 0; i < row; i++) {
-		data[i] = new double [col];//ç”³è¯·colä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-		if (!data[i]) {
-    	cout << "å†…å­˜å·²æ»¡ï¼Œæ— æ³•æ–°å»ºçŸ©é˜µ" << endl;
-		return;
-	}
-    }
-	for (int i = 0; i < row; i++){
-		for (int j = 0; j < col; j++){
-			data[i][j] = 0;
-		}
-	}
-}
-
-// åç§°ï¼šMatrix_Input è¾“å…¥å‡½æ•°ï¼ˆäºŒç»´çŸ©é˜µï¼‰
-// ä½œç”¨ï¼šè¾“å…¥çŸ©é˜µçš„åç§°ï¼Œè¡Œï¼Œåˆ—ï¼Œå’Œå…¨éƒ¨å…ƒç´ ï¼Œå¹¶å­˜å‚¨äºlistæ•°ç»„ï¼ˆæ›¾æŸè®¤ä¸ºæœ‰äº›ä¸å¦¥ï¼‰
-// å‚æ•°ï¼šæ— 
-void matrix::Matrix_Input() {
-    cout << "Name : ";
-	cin >> name;//è¾“å…¥åç§°
-	cout << "Row : " ;
-	cin >> row ;
-	cout << "Column : " ;
-	cin >> col;//è¾“å…¥è¡Œåˆ—
-	cout<<"please input data : "<<endl;
-	Matrix_Create(row, col);//è°ƒç”¨ç”Ÿæˆå‡½æ•°
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
-            cin >> data[i][j];//è¾“å…¥data
-        }
-    }
-//    list[No] = *this;//å¤åˆ¶åˆ°list[No]
-}
-
-void matrix::Matrix_Output() {
-	cout << name << endl;
-	for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
-            cout << data[i][j] << "\t";
-        }
-        cout << "\n";
-    }
-    cout << "\n";
-}
-
-matrix get_Matrix() {
-	string str;
-	cin >> str;
-	for (int i = 0; i < 100; i++) {
-        if (list[i].name == str){
-        	return list[i];
-		}
-    }
-}
-
+int matrix_search (string na); //²éÕÒº¯Êı £¨¸øÃû×Ö·µ»Ø±àºÅ£©
+void transpose(); //×ªÖÃº¯Êı£¨Ç°¶Ë£© 
+void matrix_calculate();//¼ÆËãº¯Êı£¨Ç°¶Ë£© 
+void det();//ĞĞÁĞÊ½£¨Ç°¶Ë£©
+void output();//Êä³öº¯Êı£¨Ç°¶Ë£©
+void del();//É¾³ıº¯Êı
+void clear();//Çå¿Õº¯Êı
 #endif
 

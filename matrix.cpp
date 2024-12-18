@@ -1,84 +1,146 @@
-#include <iostream>
+//ÎÄ¼ş£ºmatrix.cpp 
 #include "matrix.h"
-using namespace std;
 
-/*å¤´æ–‡ä»¶é‡Œå¤åˆ¶ä¸‹é¢å£°æ˜
-        void get_matrix_1(int order,int r, int c);
-         void get_matrix_2(int order,int r, int k);
-            void get_matrix_3(int order,int r, int c, int k);
- */
+int n = 0;//ÏÖÓĞ¾ØÕó¸öÊı 
+vector<matrix> matlist(0);//¾ØÕóÊı×é
+bool calculate_success = true;
 
-//å‚æ•°ï¼šorderï¼šçŸ©é˜µé˜¶æ•°
-//     r,c: rè¡Œcåˆ—
-//åŠŸèƒ½ï¼šè·å¾—ç¬¬ä¸€ç±»åˆç­‰çŸ©é˜µE(i,j)
-void matrix::get_matrix_1(int order,int r,int c) {
+// ¿½±´¹¹Ôìº¯Êı
+matrix::matrix(const matrix &other) {
+	name = other.name;
+    row = other.row;
+    col = other.col;
+	No = other.No;
 
-    data = new double *[order];//ç”³è¯·orderä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-    for (int i = 0; i < order; i++) {
-        data[i] = new double [order];//ç”³è¯·orderä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-        if (!data[i]) {
-            cout << "Cannot create a new matrix because memory is full" << endl;
-            return;
+    // ·ÖÅäĞÂµÄÄÚ´æ
+	data = new double*[row];
+    if (!data) {
+    	cout << "Error: memory is full" << endl;
+		return; 
+	}
+	
+    for (int i = 0; i < row; i++) {
+        data[i] = new double[col];
+        for (int j = 0; j < col; j++) {
+            data[i][j] = other.data[i][j]; // ¸´ÖÆÊı¾İ
         }
-
-    }
-    for (int i = 0; i < order; i++) {
-        for (int j = 0; j < order; j++) {
-            if(i==j&&i!=r&&i!=c) data[i][j] = 1;
-            else if(i==c||j==r) data[i][j] = 1;
-            else data[i][j] = 0;
-        }
-    }
-
-}
-
-//å‚æ•°ï¼šorder: çŸ©é˜µé˜¶æ•°
-//    r:rè¡Œ k: kå€
-//åŠŸèƒ½ï¼šè·å¾—ç¬¬äºŒç±»åˆç­‰çŸ©é˜µ E(i(k))
-void matrix::get_matrix_2(int order,int r,int k) {
-
-    data = new double *[order];//ç”³è¯·orderä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-    for (int i = 0; i < order; i++) {
-        data[i] = new double [order];//ç”³è¯·orderä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-        if (!data[i]) {
-            cout << "Cannot create a new matrix because memory is full" << endl;
-            return;
-        }
-
-    }
-    for (int i = 0; i < order; i++) {
-      for (int j = 0; j < order; j++) {
-      if(i==j&&i!=r)
-        data[i][j]=1;
-      else if(i==r&&j==r) data[i][j]=k;
-      else data[i][j] = 0;
-
-      }
-
     }
 }
 
-//å‚æ•°ï¼šorderï¼šçŸ©é˜µé˜¶æ•°
-//     r,c:rè¡Œcåˆ— kï¼škå€
-//åŠŸèƒ½ï¼šè·å–ç¬¬ä¸‰ç±»åˆç­‰çŸ©é˜µE(i,j(k))
-void matrix::get_matrix_3(int order,int r,int c,int k) {
-
-    data = new double *[order];//ç”³è¯·orderä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-    for (int i = 0; i < order; i++) {
-        data[i] = new double [order];//ç”³è¯·orderä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
-        if (!data[i]) {
-            cout << "Cannot create a new matrix because memory is full" << endl;
-            return;
+// ¸³ÖµÔËËã·ûÖØÔØ
+matrix& matrix::operator=(const matrix &other) {
+    if (this != &other) { // ·ÀÖ¹×ÔÎÒ¸³Öµ
+        // ÊÍ·Å¾ÉµÄÄÚ´æ
+        for (int i = 0; i < row; i++) {
+            delete[] data[i];
         }
+        delete[] data;
 
+        // ¸´ÖÆÊı¾İ
+        name = other.name;
+        row = other.row;
+        col = other.col;
+		No = other.No;
+        // ·ÖÅäĞÂµÄÄÚ´æ
+        data = new double*[row];
+//!´Ë´¦Î´¼ì²ânew 
+        for (int i = 0; i < row; i++) {
+            data[i] = new double[col];
+//!´Ë´¦Î´¼ì²ânew
+            for (int j = 0; j < col; j++) {
+                data[i][j] = other.data[i][j];
+            }
+        }
     }
-    for (int i = 0; i < order; i++) {
-      for (int j = 0; j < order; j++) {
-        if(i==j) data[i][j] = 1;
-        else if(i==r&&j==c) data[i][j] = k;
-        else data[i][j] = 0;
-      }
-      }
+    return *this;
+}
 
+//¼Ó·¨ÔËËã·ûÖØÔØ
+matrix matrix:: operator+(const matrix& other) {
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	if (row != other.row || col != other.col) {
+        cout << "Error: Matrix dimensions must agree for addition." << endl;
+        calculate_success = false;
+        return result; // ·µ»ØÁã¾ØÕó 
+    }
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			result.data[i][j] = data[i][j] + other.data[i][j];
+		}
+	}
+	return result;
+}
+
+//¼õ·¨ÔËËã·ûÖØÔØ
+matrix matrix::operator-(const matrix& other) {
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	if (row != other.row || col != other.col) {
+        cout << "Error: Matrix dimensions must agree for subtraction." << endl;
+        calculate_success = false;
+        return result; // ·µ»ØÁã¾ØÕó 
+    }
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			result.data[i][j] = data[i][j] - other.data[i][j];
+		}
+	}
+	return result;
+}
+
+//³Ë·¨ÔËËã·ûÖØÔØ
+matrix matrix::operator*(const matrix& other) {
+	matrix result(row, other.col);
+	result.matrix_create(row, other.col);
+	if (col != other.row) {
+		cout << "Error: Matrix dimensions must agree for multiplication." << endl;
+        calculate_success = false;
+        return result; // ·µ»ØÁã¾ØÕó 
+	}
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < other.col; j++) {
+			for (int k = 0; k < col; k++) {
+				result.data[i][j] += data[i][k] * other.data[k][j];
+			}
+		}
+	}
+	return result;
+}
+
+//ÃİÔËËã·ûÖØÔØ
+matrix matrix::operator^(int k) {
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	if (row != col || k < 0) {
+		cout << "Error: Matrix dimensions must agree for power operations." << endl;
+        calculate_success = false;
+        return result; // ·µ»ØÁã¾ØÕó
+	}
+	//³õÊ¼»¯Îªµ¥Î»¾ØÕó
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			if (i == j) {
+				result.data[i][j] = 1;
+			}
+			else result.data[i][j] = 0;
+		}
+	}
+	matrix tmp(*this);
+	for (int i = 1; i <= k; i++) {
+		result = result * tmp;
+	}
+	
+	return result;
+}
+
+// Îö¹¹º¯Êı
+matrix::~matrix() {
+    for (int i = 0; i < row; i++) {
+        delete[] data[i];
+		data[i] = NULL;//¾ÍÊÇËû 
+    }
+    delete[] data;
+	data = NULL;//»¹ÓĞËû 
 }
 
