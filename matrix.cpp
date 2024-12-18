@@ -55,8 +55,23 @@ matrix& matrix::operator=(const matrix &other) {
     return *this;
 }
 
+//相等运算符重载
+bool matrix::operator==(const matrix& other) {
+	if (row != other.row || col != other.col){
+		return 0;
+	}
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			if (data[i][j] != other.data[i][j]){
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
 //加法运算符重载
-matrix matrix:: operator+(const matrix& other) {
+matrix matrix::operator+(const matrix& other) {
 	matrix result(row, col);
 	result.matrix_create(row, col);
 	if (row != other.row || col != other.col) {

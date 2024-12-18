@@ -59,7 +59,7 @@ void show_help() {//²Ëµ¥À¸
 	cout << "clear -- to clear all matrix" << endl;
 	cout << "output -- to output the matrix you searched" << endl;
 	cout << "trans -- to transpose your matrix" << endl;
-	cout << "cal -- to start calculating(+ - * ^ T)" << endl;
+	cout << "cal -- to start calculating(+ - * ^ T -1)" << endl;
 	cout << "det -- to calculate the determinant of your matrix " << endl; 
 	cout << "list -- to get matrix name list" << endl; 
 	cout << "exit -- to end the program" << endl;
