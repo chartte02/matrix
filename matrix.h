@@ -1,4 +1,4 @@
-//æ–‡ä»¶ï¼šmatrix.h
+//ÎÄ¼ş£ºmatrix.h
 #ifndef matrix_h
 
 #define matrix_h
@@ -13,58 +13,242 @@
 #include <algorithm>
 using namespace std;
 
+extern int n;//ÏÖÓĞ¾ØÕó¸öÊı 
+extern bool fraction_fail;
+extern bool calculate_success;
+
+class fraction {
+public:	
+	long long num, den;//·Ö×Ó£¬·ÖÄ¸
+	
+	long long gcd (long long a, long long b) {
+		if(a < b){
+			swap(a,b);
+		}
+		long long c;
+		while(b){
+			c = a % b;
+			a = b;
+			b = c;
+		}
+		return a;
+	}
+	void fraction_reduct() {
+		if (num && den){
+			long long x = gcd(abs(num), den);
+			num = num / x;
+			den = den / x;
+		}
+		else {
+			den = 1ll;
+		}
+	}
+	long long abs(long long x){
+		if (x < 0) {
+			return -x;
+		}
+		return x;
+	}
+	fraction(double n = 1ll, double d = 1ll) : num(n), den(d) {
+		if (den == 0){
+			fraction_fail = 1;
+			cout << "Error : the denominator is 0 " << endl;
+			return;
+		}
+		if (den < 0){
+			den = den * -1;
+			num = num * -1;
+		}
+		fraction_reduct();
+	}
+	fraction(int n) : num(n), den(1ll) {}
+	void fraction_create(){
+		if (den == 0){
+			fraction_fail = 1;
+			cout << "Error : the denominator is 0 " << endl;
+			return;
+		}
+		if (den < 0){
+			den = den * -1;
+			num = num * -1;
+		}
+		fraction_reduct();
+	}
+	fraction& operator=(const fraction &other){
+		den = other.den;
+		num = other.num;
+	}
+	fraction operator+(const fraction &other){
+		fraction result(num * other.den + den * other.num, den * other.den);
+		return result;
+	}
+	fraction operator-(const fraction &other){
+		fraction result(num * other.den - den * other.num, den * other.den);
+		return result;
+	}
+	fraction operator*(const fraction &other){
+		fraction result(num * other.num, den * other.den);
+		return result;
+	}
+	fraction operator/(const fraction &other){
+		if (other.num == 0){
+			calculate_success = false;
+			return *this;
+		}
+		fraction result(num * other.den, den * other.num);
+		return result;
+	}
+	fraction& operator+=(const fraction &other){
+		num = num * other.den + den * other.num;
+		den = den * other.den;
+		fraction_reduct();
+		return *this;
+	}
+	fraction& operator-=(const fraction &other){
+		num = num * other.den - den * other.num;
+		den = den * other.den;
+		fraction_reduct();
+		return *this;
+	}
+	explicit operator bool() const {
+        return num != 0; // ÀıÈç£¬·Ö×Ó²»ÎªÁãÊ±ÊÓÎª true
+    }
+	friend ostream& operator<<(ostream &os, const fraction &obj){
+		if (obj.den != 1){
+			os << obj.num << '/' << obj.den;
+		} else{
+			os << obj.num;
+		}
+		return os;
+	}
+	friend istream& operator>>(istream &in, fraction &obj){
+		string str;
+		in >> str;
+		int k = str.size();
+		long long x = 0, y = 0;
+		int sign = 0;
+		int lenx = 0, leny = 0;
+		bool flagf = 1, flagx = 0, flagy = 0;
+		for (int i = 0; i < k; i++){
+			if (str[i] == '-') {
+				sign ++;
+			} else if (str[i] == '/'){
+				flagf = 0;
+			} else if (str[i] == '.' && flagf){
+				flagx = 1;
+			} else if (str[i] == '.' && !flagf){
+				flagy = 1;
+			} else {
+				if (flagf) {
+					x = 10 * x + (str[i] - '0');
+					if (flagx){
+						lenx ++;
+					}
+				} else {
+					y = 10 * y + (str[i] - '0');
+					if (flagy){
+						leny ++;
+					}
+				}
+			} 
+		}
+		if (flagf){
+			if (sign % 2){
+				obj.num = -1 * x;
+				obj.den = 1ll;
+			} else{
+				obj.num = x;
+				obj.den = 1ll;
+			}		
+		} else {
+			if (sign % 2){
+				obj.num = -1 * x;
+				obj.den = y;
+			} else{
+				obj.num = x;
+				obj.den = y;
+			}	
+		}
+		if (flagx) {
+			for (int i = 0; i < lenx; i++){
+				obj.den *= 10;
+			} 
+		}
+		if (flagy) {
+			for (int i = 0; i < leny; i++){
+				obj.num *= 10;
+			} 
+		}
+		obj.fraction_create();
+		return in;
+	}
+	bool operator==(const fraction &other){
+		if (den == other.den && num == other.num){
+			return 1;
+		}
+		return 0;
+	}
+	bool operator!=(const fraction &other){
+		if (den == other.den && num == other.num){
+			return 0;
+		}
+		return 1;
+	}
+};
+
+//template <typename T>
 class matrix {
 public:
-    string name;//åç§°
-    int No;//åºå·
-    int row, col;//è¡Œåˆ—
-    double **data;//å…ƒç´ äºŒç»´æ•°ç»„
+    string name;//Ãû³Æ
+    int No;//ĞòºÅ
+    int row, col;//ĞĞÁĞ
+    fraction **data;//ÔªËØ¶şÎ¬Êı×é
 
-    matrix(int r = 0, int c = 0) : row(r), col(c) {} // é»˜è®¤æ„é€ å‡½æ•°
-    matrix(const matrix &other); // æ‹·è´æ„é€ å‡½æ•°
-    matrix& operator=(const matrix &other); // é‡è½½èµ‹å€¼è¿ç®—ç¬¦
-    bool operator==(const matrix& other); //é‡è½½ç›¸ç­‰è¿ç®—ç¬¦
-    matrix operator+(const matrix& other);// é‡è½½åŠ æ³•è¿ç®—ç¬¦
-    matrix operator-(const matrix& other);// é‡è½½å‡æ³•è¿ç®—ç¬¦
-    matrix operator*(const matrix& other);// é‡è½½ä¹˜æ³•è¿ç®—ç¬¦
-    matrix operator^(int k);//é‡è½½å¹‚è¿ç®—ç¬¦
-    ~matrix(); // ææ„å‡½æ•°
+    matrix(int r = 0, int c = 0) : row(r), col(c) {} // Ä¬ÈÏ¹¹Ôìº¯Êı
+    matrix(const matrix &other); // ¿½±´¹¹Ôìº¯Êı
+    matrix& operator=(const matrix &other); // ÖØÔØ¸³ÖµÔËËã·û
+    bool operator==(const matrix& other); //ÖØÔØÏàµÈÔËËã·û
+    matrix operator+(const matrix& other);// ÖØÔØ¼Ó·¨ÔËËã·û
+    matrix operator-(const matrix& other);// ÖØÔØ¼õ·¨ÔËËã·û
+    matrix operator*(const matrix& other);// ÖØÔØ³Ë·¨ÔËËã·û
+    matrix operator^(int k);//ÖØÔØÃİÔËËã·û
+    ~matrix(); // Îö¹¹º¯Êı
 
-    void matrix_create(int r = 0, int c = 0);//ç”Ÿæˆå‡½æ•°ï¼ˆé›¶çŸ©é˜µï¼‰
-    void matrix_create_E (int order);//ç”Ÿæˆå‡½æ•°ï¼ˆå•ä½çŸ©é˜µï¼‰
-    void matrix_create_1(int order,int i, int j);//ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ1ï¼‰
-    void matrix_create_2(int order,int i, double k);//ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ2ï¼‰
-    void matrix_create_3(int order,int i, int j, double k);//ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ3ï¼‰
-    void matrix_create_random(int i, int j, double a, double b);//ç”Ÿæˆå‡½æ•°ï¼ˆéšæœºçŸ©é˜µï¼‰
-    void matrix_create_diagonal(int i,int j,double a,double b);//ç”Ÿæˆå‡½æ•°ï¼ˆéšæœºå¯¹è§’çŸ©é˜µï¼‰
-    void matrix_create_upper_triangular(int i, int j, double a, double b);//ç”Ÿæˆå‡½æ•°ï¼ˆéšæœºä¸Šä¸‰è§’çŸ©é˜µï¼‰
+    void matrix_create(int r = 0, int c = 0);//Éú³Éº¯Êı£¨Áã¾ØÕó£©
+    void matrix_create_E (int order);//Éú³Éº¯Êı£¨µ¥Î»¾ØÕó£©
+    void matrix_create_1(int order,int i, int j);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó1£©
+    void matrix_create_2(int order,int i, fraction k);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó2£©
+    void matrix_create_3(int order,int i, int j, fraction k);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó3£©
+    void matrix_create_random(int i, int j, double a, double b);//Éú³Éº¯Êı£¨Ëæ»ú¾ØÕó£©
+    void matrix_create_diagonal(int i,int j, double a,double b);//Éú³Éº¯Êı£¨Ëæ»ú¶Ô½Ç¾ØÕó£©
+    void matrix_create_upper_triangular(int i, int j, double a, double b);//Éú³Éº¯Êı£¨Ëæ»úÉÏÈı½Ç¾ØÕó£©
 
-    void matrix_store(); // å­˜å‚¨å‡½æ•°ï¼ˆä»»æ„çŸ©é˜µï¼‰
-    void matrix_input();//è¾“å…¥å‡½æ•° ï¼ˆäºŒç»´çŸ©é˜µï¼‰
-    void matrix_display(int no_name = 0);//è¾“å‡ºå‡½æ•°ï¼ˆè¾“å‡ºå®Œæ•´çŸ©é˜µï¼‰ï¼ˆæ— éœ€å­˜å‚¨ï¼‰
+    void matrix_store(); // ´æ´¢º¯Êı£¨ÈÎÒâ¾ØÕó£©
+    void matrix_input();//ÊäÈëº¯Êı £¨¶şÎ¬¾ØÕó£©
+    void matrix_display(int no_name = 0);//Êä³öº¯Êı£¨Êä³öÍêÕû¾ØÕó£©£¨ÎŞĞè´æ´¢£©
 
-    matrix matrix_transpose();//è½¬ç½®çŸ©é˜µ
-    matrix matrix_inverse();//é€†çŸ©é˜µ
-    matrix matrix_simplify_1();//åŒ–ç®€ä¸ºè¡Œé˜¶æ¢¯å½¢çŸ©é˜µ
-    matrix matrix_simplify_2();//åŒ–ç®€ä¸ºç®€åŒ–è¡Œé˜¶æ¢¯å½¢çŸ©é˜µ
+    matrix matrix_transpose();//×ªÖÃ¾ØÕó
+    matrix matrix_inverse();//Äæ¾ØÕó
+    matrix matrix_simplify_1();//»¯¼òÎªĞĞ½×ÌİĞÎ¾ØÕó
+    matrix matrix_simplify_2();//»¯¼òÎª¼ò»¯ĞĞ½×ÌİĞÎ¾ØÕó
     void matrix_simplify_3();
-    double matrix_det();//è¡Œåˆ—å¼
+    fraction matrix_det();//ĞĞÁĞÊ½
 
     void matrix_modify_name(string na);
     void matrix_intercept_row(int r2,int r1);
     void matrix_intercept_col(int c2,int c1);
     void matrix_intercept_dia(int d);
     void matrix_modify();
-    void matrix::matrix_intercept();
+    void matrix_intercept();
 
-    void matrix::solve_system_of_linear_equtions( matrix&m1, matrix&m2) ;
+    void solve_system_of_linear_equtions(matrix &m1, matrix &m2) ;
 };
 
-int matrix_search (string na); //æŸ¥æ‰¾å‡½æ•° ï¼ˆç»™åå­—è¿”å›ç¼–å·ï¼‰
-void transpose(); //è½¬ç½®å‡½æ•°ï¼ˆå‰ç«¯ï¼‰
-void matrix_calculate();//è®¡ç®—å‡½æ•°ï¼ˆå‰ç«¯ï¼‰
-void det();//è¡Œåˆ—å¼ï¼ˆå‰ç«¯ï¼‰
-void output();//è¾“å‡ºå‡½æ•°ï¼ˆå‰ç«¯ï¼‰
-void del();//åˆ é™¤å‡½æ•°
-void clear();//æ¸…ç©ºå‡½æ•°
+int matrix_search (string na); //²éÕÒº¯Êı £¨¸øÃû×Ö·µ»Ø±àºÅ£©
+void transpose(); //×ªÖÃº¯Êı£¨Ç°¶Ë£©
+void matrix_calculate();//¼ÆËãº¯Êı£¨Ç°¶Ë£©
+void det();//ĞĞÁĞÊ½£¨Ç°¶Ë£©
+void output();//Êä³öº¯Êı£¨Ç°¶Ë£©
+void del();//É¾³ıº¯Êı
+void clear();//Çå¿Õº¯Êı
 #endif
