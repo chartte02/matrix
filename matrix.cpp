@@ -1,9 +1,11 @@
 //文件：matrix.cpp 
 #include "matrix.h"
 
-int n = 0;//现有矩阵个数 
-vector<matrix> matlist(0);//矩阵数组
-bool calculate_success = true;
+extern vector<matrix> matlist;//矩阵数组
+extern int n;//现有矩阵个数 
+extern bool fraction_fail;
+extern bool calculate_success;
+
 
 // 拷贝构造函数
 matrix::matrix(const matrix &other) {
@@ -13,14 +15,14 @@ matrix::matrix(const matrix &other) {
 	No = other.No;
 
     // 分配新的内存
-	data = new double*[row];
+	data = new fraction*[row];
     if (!data) {
     	cout << "Error: memory is full" << endl;
 		return; 
 	}
 	
     for (int i = 0; i < row; i++) {
-        data[i] = new double[col];
+        data[i] = new fraction[col];
         for (int j = 0; j < col; j++) {
             data[i][j] = other.data[i][j]; // 复制数据
         }
@@ -42,10 +44,10 @@ matrix& matrix::operator=(const matrix &other) {
         col = other.col;
 		No = other.No;
         // 分配新的内存
-        data = new double*[row];
+        data = new fraction*[row];
 //!此处未检测new 
         for (int i = 0; i < row; i++) {
-            data[i] = new double[col];
+            data[i] = new fraction[col];
 //!此处未检测new
             for (int j = 0; j < col; j++) {
                 data[i][j] = other.data[i][j];
