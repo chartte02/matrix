@@ -1,4 +1,4 @@
-//ÎÄ¼ş£ºmatrix.h
+//æ–‡ä»¶ï¼šmatrix.h
 #ifndef matrix_h
 
 #define matrix_h
@@ -7,56 +7,63 @@
 #include <sstream>
 #include <vector>
 #include <stdexcept>
-#include <cstdlib> 
+#include <cstdlib>
 #include <ctime>
 #include <iomanip>
-
+#include <algorithm>
 using namespace std;
 
 class matrix {
 public:
-	string name;//Ãû³Æ 
-	int No;//ĞòºÅ 
-	int row, col;//ĞĞÁĞ 
-	double **data;//ÔªËØ¶şÎ¬Êı×é 
-    
-	matrix(int r = 0, int c = 0) : row(r), col(c) {} // Ä¬ÈÏ¹¹Ôìº¯Êı
-	matrix(const matrix &other); // ¿½±´¹¹Ôìº¯Êı
-	matrix& operator=(const matrix &other); // ÖØÔØ¸³ÖµÔËËã·û
-	bool operator==(const matrix& other); //ÖØÔØÏàµÈÔËËã·û
-	matrix operator+(const matrix& other);// ÖØÔØ¼Ó·¨ÔËËã·û
-	matrix operator-(const matrix& other);// ÖØÔØ¼õ·¨ÔËËã·û
-	matrix operator*(const matrix& other);// ÖØÔØ³Ë·¨ÔËËã·û
-	matrix operator^(int k);//ÖØÔØÃİÔËËã·û
-	~matrix(); // Îö¹¹º¯Êı
-	
-	void matrix_create(int r = 0, int c = 0);//Éú³Éº¯Êı£¨Áã¾ØÕó£©
-	void matrix_create_E (int order);//Éú³Éº¯Êı£¨µ¥Î»¾ØÕó£©
-	void matrix_create_1(int order,int i, int j);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó1£©
-	void matrix_create_2(int order,int i, double k);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó2£©
-	void matrix_create_3(int order,int i, int j, double k);//Éú³Éº¯Êı£¨³õµÈ¾ØÕó3£©
-	void matrix_create_random(int i, int j, double a, double b);//Éú³Éº¯Êı£¨Ëæ»ú¾ØÕó£©
-	
-	void matrix_store(); // ´æ´¢º¯Êı£¨ÈÎÒâ¾ØÕó£©
-	void matrix_input();//ÊäÈëº¯Êı £¨¶şÎ¬¾ØÕó£© 
-	void matrix_display(int no_name = 0);//Êä³öº¯Êı£¨Êä³öÍêÕû¾ØÕó£©£¨ÎŞĞè´æ´¢£©
-	
-	matrix matrix_transpose();//×ªÖÃ¾ØÕó
-	matrix matrix_inverse();//Äæ¾ØÕó 
-	matrix matrix_simplify_1();//»¯¼òÎªĞĞ½×ÌİĞÎ¾ØÕó
-	matrix matrix_simplify_2();//»¯¼òÎª¼ò»¯ĞĞ½×ÌİĞÎ¾ØÕó
-	void matrix_simplify_3();
-	double matrix_det();//ĞĞÁĞÊ½ 
-	
-	
+    string name;//åç§°
+    int No;//åºå·
+    int row, col;//è¡Œåˆ—
+    double **data;//å…ƒç´ äºŒç»´æ•°ç»„
+
+    matrix(int r = 0, int c = 0) : row(r), col(c) {} // é»˜è®¤æ„é€ å‡½æ•°
+    matrix(const matrix &other); // æ‹·è´æ„é€ å‡½æ•°
+    matrix& operator=(const matrix &other); // é‡è½½èµ‹å€¼è¿ç®—ç¬¦
+    bool operator==(const matrix& other); //é‡è½½ç›¸ç­‰è¿ç®—ç¬¦
+    matrix operator+(const matrix& other);// é‡è½½åŠ æ³•è¿ç®—ç¬¦
+    matrix operator-(const matrix& other);// é‡è½½å‡æ³•è¿ç®—ç¬¦
+    matrix operator*(const matrix& other);// é‡è½½ä¹˜æ³•è¿ç®—ç¬¦
+    matrix operator^(int k);//é‡è½½å¹‚è¿ç®—ç¬¦
+    ~matrix(); // ææ„å‡½æ•°
+
+    void matrix_create(int r = 0, int c = 0);//ç”Ÿæˆå‡½æ•°ï¼ˆé›¶çŸ©é˜µï¼‰
+    void matrix_create_E (int order);//ç”Ÿæˆå‡½æ•°ï¼ˆå•ä½çŸ©é˜µï¼‰
+    void matrix_create_1(int order,int i, int j);//ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ1ï¼‰
+    void matrix_create_2(int order,int i, double k);//ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ2ï¼‰
+    void matrix_create_3(int order,int i, int j, double k);//ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ3ï¼‰
+    void matrix_create_random(int i, int j, double a, double b);//ç”Ÿæˆå‡½æ•°ï¼ˆéšæœºçŸ©é˜µï¼‰
+
+    void matrix_store(); // å­˜å‚¨å‡½æ•°ï¼ˆä»»æ„çŸ©é˜µï¼‰
+    void matrix_input();//è¾“å…¥å‡½æ•° ï¼ˆäºŒç»´çŸ©é˜µï¼‰
+    void matrix_display(int no_name = 0);//è¾“å‡ºå‡½æ•°ï¼ˆè¾“å‡ºå®Œæ•´çŸ©é˜µï¼‰ï¼ˆæ— éœ€å­˜å‚¨ï¼‰
+
+    matrix matrix_transpose();//è½¬ç½®çŸ©é˜µ
+    matrix matrix_inverse();//é€†çŸ©é˜µ
+    matrix matrix_simplify_1();//åŒ–ç®€ä¸ºè¡Œé˜¶æ¢¯å½¢çŸ©é˜µ
+    matrix matrix_simplify_2();//åŒ–ç®€ä¸ºç®€åŒ–è¡Œé˜¶æ¢¯å½¢çŸ©é˜µ
+    void matrix_simplify_3();
+    double matrix_det();//è¡Œåˆ—å¼
+
+ void matrix_modify_name(string na);
+ void matrix_intercept_row(int r2,int r1);
+ void matrix_intercept_col(int c2,int c1);
+ void matrix_intercept_dia(int d);
+void matrix_modify();
+void matrix::matrix_intercept();
+
+void matrix::solve_system_of_linear_equtions( matrix&m1, matrix&m2) ;
 };
 
-int matrix_search (string na); //²éÕÒº¯Êı £¨¸øÃû×Ö·µ»Ø±àºÅ£©
-void transpose(); //×ªÖÃº¯Êı£¨Ç°¶Ë£© 
-void matrix_calculate();//¼ÆËãº¯Êı£¨Ç°¶Ë£© 
-void det();//ĞĞÁĞÊ½£¨Ç°¶Ë£©
-void output();//Êä³öº¯Êı£¨Ç°¶Ë£©
-void del();//É¾³ıº¯Êı
-void clear();//Çå¿Õº¯Êı
+int matrix_search (string na); //æŸ¥æ‰¾å‡½æ•° ï¼ˆç»™åå­—è¿”å›ç¼–å·ï¼‰
+void transpose(); //è½¬ç½®å‡½æ•°ï¼ˆå‰ç«¯ï¼‰
+void matrix_calculate();//è®¡ç®—å‡½æ•°ï¼ˆå‰ç«¯ï¼‰
+void det();//è¡Œåˆ—å¼ï¼ˆå‰ç«¯ï¼‰
+void output();//è¾“å‡ºå‡½æ•°ï¼ˆå‰ç«¯ï¼‰
+void del();//åˆ é™¤å‡½æ•°
+void clear();//æ¸…ç©ºå‡½æ•°
 #endif
 
