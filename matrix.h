@@ -53,9 +53,8 @@ public:
  void matrix_intercept_col(int c2,int c1);
  void matrix_intercept_dia(int d);
 void matrix_modify();
-void matrix::matrix_intercept();
-
-void matrix::solve_system_of_linear_equtions( matrix&m1, matrix&m2) ;
+void matrix_intercept();
+void solve_system_of_linear_equtions( matrix&m1, matrix&m2) ;
 };
 
 int matrix_search (string na); //查找函数 （给名字返回编号）
