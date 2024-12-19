@@ -36,6 +36,8 @@ public:
     void matrix_create_2(int order,int i, double k);//生成函数（初等矩阵2）
     void matrix_create_3(int order,int i, int j, double k);//生成函数（初等矩阵3）
     void matrix_create_random(int i, int j, double a, double b);//生成函数（随机矩阵）
+    void matrix_create_diagonal(int i,int j,double a,double b);//生成函数（随机对角矩阵）
+	void matrix_create_upper_triangular(int i, int j, double a, double b);//生成函数（随机上三角矩阵）
 
     void matrix_store(); // 存储函数（任意矩阵）
     void matrix_input();//输入函数 （二维矩阵）
@@ -53,8 +55,9 @@ public:
  void matrix_intercept_col(int c2,int c1);
  void matrix_intercept_dia(int d);
 void matrix_modify();
-void matrix_intercept();
-void solve_system_of_linear_equtions( matrix&m1, matrix&m2) ;
+void matrix::matrix_intercept();
+
+void matrix::solve_system_of_linear_equtions( matrix&m1, matrix&m2) ;
 };
 
 int matrix_search (string na); //查找函数 （给名字返回编号）
@@ -65,4 +68,3 @@ void output();//输出函数（前端）
 void del();//删除函数
 void clear();//清空函数
 #endif
-
