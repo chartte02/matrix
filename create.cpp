@@ -88,6 +88,9 @@ void matrix::matrix_create_3 (int order, int i, int j, fraction k) {
 	}
 }
 
+//名称： matrix_create_random 生成函数（随机矩阵）
+//功能：随机生成矩阵
+//参数：i,j:行列数  a,b:随机生成值的范围 
 void matrix::matrix_create_random(int i, int j, double a, double b) {
 	srand(time(NULL));
     matrix_create(i,j);
@@ -97,3 +100,42 @@ void matrix::matrix_create_random(int i, int j, double a, double b) {
         }
     }
 }
+
+//名称： matrix_create_diagonal 生成函数（对角矩阵）
+//功能：随机生成对角矩阵
+//参数：i,j:行列数  a,b:随机生成值的范围 
+void matrix::matrix_create_diagonal(int i, int j, double a, double b) {
+	if (i != j) {
+        cout << "Error: Diagonal matrix must be square" << endl;
+        return;
+    }
+	srand(time(NULL));
+	matrix_create(i, j);
+	for (int k = 0; k < row; k++) {
+		for (int l = 0; l < col; l++) {
+			if (k == l) {
+				data[k][l] = a + (b - a) * rand() / ((double)RAND_MAX);
+			}
+		}
+	}
+}
+
+//名称： matrix_create_upper_triangular 生成函数（上三角矩阵）
+//功能：随机生成上三角矩阵
+//参数：i,j:行列数  a,b:随机生成值的范围 
+void matrix::matrix_create_upper_triangular(int i, int j, double a, double b) {
+	if (i != j) {
+        cout << "Error: Diagonal matrix must be square" << endl;
+        return;
+    }
+	srand(time(NULL));
+	matrix_create(i, j);
+	for (int k = 0; k < row; k++) {
+		for (int l = 0; l < col; l++) {
+			if (k <= l) {
+				data[k][l]= a + (b - a) * rand() / ((double)RAND_MAX);
+			}
+		}
+	}
+}
+
