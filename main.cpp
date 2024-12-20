@@ -1,7 +1,8 @@
 #include "matrix.h"
 
-extern int n;
 extern vector<matrix> matlist;
+extern int n;//现有矩阵个数 
+extern bool fraction_fail;
 extern bool calculate_success;
 
 void show_help();

@@ -21,7 +21,7 @@ class fraction {
 public:	
 	long long num, den;//分子，分母
 	
-	long long gcd (long long a, long long b) {
+	long long gcd (long long a, long long b) {//求最大公约数 
 		if(a < b){
 			swap(a,b);
 		}
@@ -33,7 +33,7 @@ public:
 		}
 		return a;
 	}
-	void fraction_reduct() {
+	void fraction_reduct() {//分数化简 
 		if (num && den){
 			long long x = gcd(abs(num), den);
 			num = num / x;
@@ -43,13 +43,13 @@ public:
 			den = 1ll;
 		}
 	}
-	long long abs(long long x){
+	long long abs(long long x){//取绝对值 
 		if (x < 0) {
 			return -x;
 		}
 		return x;
 	}
-	fraction(double n = 1ll, double d = 1ll) : num(n), den(d) {
+	fraction(long long n = 1ll, long long d = 1ll) : num(n), den(d) {//构造函数 
 		if (den == 0){
 			fraction_fail = 1;
 			cout << "Error : the denominator is 0 " << endl;
@@ -61,8 +61,24 @@ public:
 		}
 		fraction_reduct();
 	}
-	fraction(int n) : num(n), den(1ll) {}
-	void fraction_create(){
+	fraction(int n) : num(n), den(1ll) {}//int转fraction
+	fraction(double n){//double转fraction 
+		int len, x;
+		x = n / 1;
+		for (len = 0; ; len++){
+			x = n / 1;
+			if (n != x){
+				n *= 10;
+			
+				den *= 10;
+			} else{
+				break;
+			}
+		}
+		num = n;
+		fraction_reduct();
+	}
+	void fraction_create(){//生成函数 
 		if (den == 0){
 			fraction_fail = 1;
 			cout << "Error : the denominator is 0 " << endl;
@@ -74,23 +90,23 @@ public:
 		}
 		fraction_reduct();
 	}
-	fraction& operator=(const fraction &other){
+	fraction& operator=(const fraction &other){//赋值运算符重载 
 		den = other.den;
 		num = other.num;
 	}
-	fraction operator+(const fraction &other){
+	fraction operator+(const fraction &other){//+运算符重载 
 		fraction result(num * other.den + den * other.num, den * other.den);
 		return result;
 	}
-	fraction operator-(const fraction &other){
+	fraction operator-(const fraction &other){//-运算符重载 
 		fraction result(num * other.den - den * other.num, den * other.den);
 		return result;
 	}
-	fraction operator*(const fraction &other){
+	fraction operator*(const fraction &other){//*运算符重载 
 		fraction result(num * other.num, den * other.den);
 		return result;
 	}
-	fraction operator/(const fraction &other){
+	fraction operator/(const fraction &other){// / 运算符重载 
 		if (other.num == 0){
 			calculate_success = false;
 			return *this;
@@ -98,22 +114,22 @@ public:
 		fraction result(num * other.den, den * other.num);
 		return result;
 	}
-	fraction& operator+=(const fraction &other){
+	fraction& operator+=(const fraction &other){//+=
 		num = num * other.den + den * other.num;
 		den = den * other.den;
 		fraction_reduct();
 		return *this;
 	}
-	fraction& operator-=(const fraction &other){
+	fraction& operator-=(const fraction &other){//-=
 		num = num * other.den - den * other.num;
 		den = den * other.den;
 		fraction_reduct();
 		return *this;
 	}
-	explicit operator bool() const {
+	explicit operator bool() const {//fraction转bool 
         return num != 0; // 例如，分子不为零时视为 true
     }
-	friend ostream& operator<<(ostream &os, const fraction &obj){
+	friend ostream& operator<<(ostream &os, const fraction &obj){//输出流重载 
 		if (obj.den != 1){
 			os << obj.num << '/' << obj.den;
 		} else{
@@ -121,7 +137,7 @@ public:
 		}
 		return os;
 	}
-	friend istream& operator>>(istream &in, fraction &obj){
+	friend istream& operator>>(istream &in, fraction &obj){//输入流重载 
 		string str;
 		in >> str;
 		int k = str.size();

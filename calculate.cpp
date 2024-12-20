@@ -318,107 +318,54 @@ void matrix_calculate() {
 		return;
 	}
 	vector<matrix> mat_cal;//将名字转化为矩阵 
-	if (store){ 
-		for (int i = 1; i < mat.size(); i++){
-			if (i - 1 < op.size() && op[i - 1] == "^" && matrix_search(mat[i]) != -1){
-				matrix temp;
-				temp.matrix_create();
-				temp = matlist[matrix_search(mat[i])];
-				while (i - 1 < op.size() && op[i - 1] == "^"){
-					if (mat[i + 1] == "T"){
-						temp = temp.matrix_transpose();
-						op.erase(op.begin() + i - 1);
-						mat.erase(mat.begin() + i + 1);
-						continue;
+	for (int i = store; i < mat.size(); i++){
+		if (i - store < op.size() && op[i - store] == "^" && matrix_search(mat[i]) != -1){
+			matrix temp;
+			temp.matrix_create();
+			temp = matlist[matrix_search(mat[i])];
+			while (i - store < op.size() && op[i - store] == "^"){
+				if (mat[i + 1] == "T"){
+					temp = temp.matrix_transpose();
+					op.erase(op.begin() + i - store);
+					mat.erase(mat.begin() + i + 1);
+					continue;
+				}
+				if (mat[i + 1] == "-1"){
+					temp = temp.matrix_inverse();
+					if (!calculate_success){
+						calculate_success = true;
+						return;
 					}
-					if (mat[i + 1] == "-1"){
-						temp = temp.matrix_inverse();
+					op.erase(op.begin() + i - store);
+					mat.erase(mat.begin() + i + 1);
+					continue;
+				}
+				else{
+					try {
+						int x = stoi(mat[i + 1]);
+						temp = temp ^ x;
 						if (!calculate_success){
 							calculate_success = true;
 							return;
 						}
-						op.erase(op.begin() + i - 1);
+						op.erase(op.begin() + i - store);
 						mat.erase(mat.begin() + i + 1);
 						continue;
 					}
-					else{
-						try {
-							int x = stoi(mat[i + 1]);
-							temp = temp ^ x;
-							if (!calculate_success){
-								calculate_success = true;
-								return;
-							}
-							op.erase(op.begin() + i - 1);
-							mat.erase(mat.begin() + i + 1);
-							continue;
-						}
-						catch (const invalid_argument& e) {
-		    				cerr << "Invalid argument: " << "power operation" << endl;
-		    				return;
-		    			}
-					}
+					catch (const invalid_argument& e) {
+	    				cerr << "Invalid argument: " << "power operation" << endl;
+	    				return;
+	    			}
 				}
-				mat_cal.push_back(temp); 
 			}
-			if (matrix_search(mat[i]) == -1){
-				cout << "Not Found " << mat[i] << endl;
-				return;
-			}
-			mat_cal.push_back(matlist[matrix_search(mat[i])]);
+			mat_cal.push_back(temp); 
+		} else if (matrix_search(mat[i]) == -1){
+			cout << "Not Found " << mat[i] << endl;
+			return;
 		}
+		mat_cal.push_back(matlist[matrix_search(mat[i])]);
 	}
-	else { 
-		for (int i = 0; i < mat.size(); i++){
-			if (i < op.size() && op[i] == "^" && matrix_search(mat[i]) != -1){
-				matrix temp;
-				temp.matrix_create();
-				temp = matlist[matrix_search(mat[i])];
-				while (i < op.size() && op[i] == "^"){
-					if (mat[i + 1] == "T"){
-						temp = temp.matrix_transpose();
-						op.erase(op.begin() + i);
-						mat.erase(mat.begin() + i + 1);
-						continue;
-					}
-					if (mat[i + 1] == "-1"){
-						temp = temp.matrix_inverse();
-						if (!calculate_success){
-							calculate_success = true;
-							return;
-						}
-						op.erase(op.begin() + i);
-						mat.erase(mat.begin() + i + 1);
-						continue;
-					}
-					else{
-						try {
-							int x = stoi(mat[i + 1]);
-							temp = temp ^ x;
-							if (!calculate_success){
-								calculate_success = true;
-								return;
-							}
-							op.erase(op.begin() + i);
-							mat.erase(mat.begin() + i + 1);
-							continue;
-						}
-						catch (const invalid_argument& e) {
-		    				cerr << "Invalid argument: " << "power operation" << endl;
-		    				return;
-		    			}
-					}
-				}
-				mat_cal.push_back(temp); 	
-			} else if (matrix_search(mat[i]) == -1){
-				cout << "Not Found " << mat[i] << endl;
-				return;
-			} else{
-				mat_cal.push_back(matlist[matrix_search(mat[i])]);
-			}
-		}
-	}
-
+	
 	for (int i = 0; i < op.size() && op.size() > 0; i++) {//*
 		if (op[i] == "*") {
 			mat_cal[i] = mat_cal[i] * mat_cal[i + 1];

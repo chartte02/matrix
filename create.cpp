@@ -96,7 +96,7 @@ void matrix::matrix_create_random(int i, int j, double a, double b) {
     matrix_create(i,j);
     for(int k=0;k<row;k++) {
         for(int l=0;l<col;l++) {
-            data[k][l]=a+(b-a)*rand()/((double) RAND_MAX);
+            data[k][l]= fraction(a) + fraction((b - a) * rand(), RAND_MAX);
         }
     }
 }
@@ -114,7 +114,7 @@ void matrix::matrix_create_diagonal(int i, int j, double a, double b) {
 	for (int k = 0; k < row; k++) {
 		for (int l = 0; l < col; l++) {
 			if (k == l) {
-				data[k][l] = a + (b - a) * rand() / ((double)RAND_MAX);
+				data[k][l]= fraction(a) + fraction((b - a) * rand(), RAND_MAX);
 			}
 		}
 	}
@@ -133,7 +133,7 @@ void matrix::matrix_create_upper_triangular(int i, int j, double a, double b) {
 	for (int k = 0; k < row; k++) {
 		for (int l = 0; l < col; l++) {
 			if (k <= l) {
-				data[k][l]= a + (b - a) * rand() / ((double)RAND_MAX);
+				data[k][l]= fraction(a) + fraction((b - a) * rand(), RAND_MAX);
 			}
 		}
 	}

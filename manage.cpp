@@ -5,8 +5,10 @@ input、output、search、store、display
 */
 #include "matrix.h"
 
-extern vector<matrix> matlist;//矩阵数组
-extern int n;
+int n = 0;//现有矩阵个数 
+vector<matrix> matlist(0);//矩阵数组
+bool fraction_fail = 0;
+bool calculate_success = true;
 
 // 名称：matrix_search 查找函数（已知名字） 
 // 功能：查找matlist中的同名函数 
@@ -91,6 +93,12 @@ void matrix::matrix_input() {
         			cout << "Wrong input (must be of double type)" << endl;
         			cin.clear(); // 清除输入流的状态
 					cin.ignore(100, '\n'); 
+        			return;
+    			}
+    			if (fraction_fail) {
+        			cin.clear(); // 清除输入流的状态
+					cin.ignore(100, '\n'); 
+					fraction_fail = 0;
         			return;
     			}
 	        }
