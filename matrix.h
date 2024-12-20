@@ -102,6 +102,10 @@ public:
 		fraction result(num * other.den - den * other.num, den * other.den);
 		return result;
 	}
+	fraction operator-(){//-运算符重载 
+		fraction result(- num, den);
+		return result;
+	}
 	fraction operator*(const fraction &other){//*运算符重载 
 		fraction result(num * other.num, den * other.den);
 		return result;
@@ -246,7 +250,7 @@ public:
     matrix matrix_transpose();//转置矩阵
     matrix matrix_inverse();//逆矩阵
     matrix matrix_simplify_1();//化简为行阶梯形矩阵
-    matrix matrix_simplify_2();//化简为简化行阶梯形矩阵
+    matrix matrix_simplify_2(int *the_number_of_pivots=nullptr);//化简为简化行阶梯形矩阵
     void matrix_simplify_3();
     fraction matrix_det();//行列式
 
@@ -256,8 +260,10 @@ public:
     void matrix_intercept_dia(int d);
     void matrix_modify();
     void matrix_intercept();
+    void create_argumentation(const matrix&m1,const matrix &m2);
+    void matrix_modify_data(int i,int j,fraction data_);
 
-    void solve_system_of_linear_equtions(matrix &m1, matrix &m2) ;
+    void solve_system_of_linear_equtions(matrix &m1, matrix &m2);
 };
 
 int matrix_search (string na); //查找函数 （给名字返回编号）
