@@ -46,7 +46,7 @@ public:
     matrix matrix_transpose();//转置矩阵
     matrix matrix_inverse();//逆矩阵
     matrix matrix_simplify_1();//化简为行阶梯形矩阵
-    matrix matrix_simplify_2();//化简为简化行阶梯形矩阵
+    matrix matrix_simplify_2(int * the_number_of_pivots);//化简为简化行阶梯形矩阵
     void matrix_simplify_3();
     double matrix_det();//行列式
 
