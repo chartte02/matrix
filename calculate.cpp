@@ -47,7 +47,7 @@ matrix matrix::matrix_simplify_1() {
 //功能：将矩阵化简为简化行阶梯形矩阵并存储
 //参数：无
 //返回值：简化行阶梯形矩阵
-matrix matrix::matrix_simplify_2(*int the_number_of_pivots) {
+matrix matrix::matrix_simplify_2(*int the_number_of_pivots=nullptr) {
 	matrix temp;
 	temp.matrix_create(); 
 	temp = *this;
