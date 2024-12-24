@@ -240,8 +240,10 @@ public:
     void matrix_create_2(int order,int i, fraction k);//生成函数（初等矩阵2）
     void matrix_create_3(int order,int i, int j, fraction k);//生成函数（初等矩阵3）
     void matrix_create_random(int i, int j, double a, double b);//生成函数（随机矩阵）
-    void matrix_create_diagonal(int i,int j, double a,double b);//生成函数（随机对角矩阵）
-    void matrix_create_upper_triangular(int i, int j, double a, double b);//生成函数（随机上三角矩阵）
+    void matrix_create_diagonal(int i, int a,int b);//生成函数（随机对角矩阵）
+    void matrix_create_upper_triangular(int i, int a, int b);//生成函数（随机上三角矩阵）
+    void matrix_cin_diagonal(int i);//用户输入对角线上元素的对角矩阵
+    void matrix_scalar(int i, fraction k);//对角线上元素为k的纯量矩阵
 
     void matrix_store(); // 存储函数（任意矩阵）
     void matrix_input();//输入函数 （二维矩阵）
