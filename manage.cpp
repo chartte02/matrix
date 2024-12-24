@@ -41,9 +41,18 @@ void matrix::matrix_store() {
 // 名称：matrix_display 输出函数（二维矩阵） （无需存储） 
 // 功能：输出当前矩阵的所有元素 
 // 参数：无
-void matrix::matrix_display(int no_name) {
+void matrix::matrix_display(int no_name, int type) {
 	if (!no_name) {
 		cout << name << endl;
+	}
+	if (type){
+		for (int i = 0; i < row; i++) {
+        	for (int j = 0; j < col; j++) {
+        	    cout << double(data[i][j]) << "\t";
+        	} 
+        	cout << endl;
+    	}
+    	return;
 	}
 	for (int i = 0; i < row; i++) {
         for (int j = 0; j < col; j++) {
