@@ -110,7 +110,11 @@ void matrix::matrix_create_diagonal(int i, int a, int b) {
 	matrix_create(i, i);
 	for (int k = 0; k < row; k++) {
 		int num = a + rand() % (b - a + 1);
-		data[k][k] = fraction(num, 1);
+		int dem= a + rand() % (b - a + 1);
+		while (dem == 0) {
+			dem = a + rand() % (b - a + 1);
+		}
+		data[k][k] = fraction(num, dem);
 	}
 }
 
@@ -125,7 +129,11 @@ void matrix::matrix_create_upper_triangular(int i, int a, int b) {
 		for (int l = 0; l < col; l++) {
 			if (k <= l) {
 				int num = a + rand() % (b - a + 1);
-				data[k][l] = fraction(num, 1);
+				int dem = a + rand() % (b - a + 1);
+				while (dem == 0) {
+					dem = a + rand() % (b - a + 1);
+				}
+				data[k][l] = fraction(num, dem);
 			}
 		}
 	}
