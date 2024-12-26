@@ -1,30 +1,30 @@
-//ÎÄ¼ş£ºcalculate.cpp
+//æ–‡ä»¶ï¼šcalculate.cpp
 /*
-¸÷ÖÖ¼ÆËãº¯Êı
-transpose¡¢calculate 
+å„ç§è®¡ç®—å‡½æ•°
+transposeã€calculate 
 */
 #include "matrix.h"
 
-extern vector<matrix> matlist;//¾ØÕóÊı×é
+extern vector<matrix> matlist;//çŸ©é˜µæ•°ç»„
 extern int n;
 extern bool calculate_success;
 
-//Ãû³Æ£ºmatrix_simplify_1»¯¼òº¯Êı
-//¹¦ÄÜ£º½«¾ØÕó»¯¼òÎªĞĞ½×ÌİĞÎ¾ØÕó²¢´æ´¢
-//²ÎÊı£ºÎŞ
-//·µ»ØÖµ£ºĞĞ½×ÌİĞÎ¾ØÕó 
+//åç§°ï¼šmatrix_simplify_1åŒ–ç®€å‡½æ•°
+//åŠŸèƒ½ï¼šå°†çŸ©é˜µåŒ–ç®€ä¸ºè¡Œé˜¶æ¢¯å½¢çŸ©é˜µå¹¶å­˜å‚¨
+//å‚æ•°ï¼šæ— 
+//è¿”å›å€¼ï¼šè¡Œé˜¶æ¢¯å½¢çŸ©é˜µ 
 matrix matrix::matrix_simplify_1() {
 	matrix temp;
 	temp.matrix_create(); 
 	temp = *this;
-//	temp.name = name + "_1S";//ÓÃÓÚÃüÃû»¯¼òºóµÃµ½µÄĞĞ½×ÌİĞÍ¾ØÕó
-	int num = 0;//ÓÃÓÚÈ·¶¨ĞĞ½×ÌİÒÑ¾­µ½´ïÄÄÒ»ĞĞ
+//	temp.name = name + "_1S";//ç”¨äºå‘½ååŒ–ç®€åå¾—åˆ°çš„è¡Œé˜¶æ¢¯å‹çŸ©é˜µ
+	int num = 0;//ç”¨äºç¡®å®šè¡Œé˜¶æ¢¯å·²ç»åˆ°è¾¾å“ªä¸€è¡Œ
 	for (int i = 0; i < col; i++) {
 		for (int j = num; j < row; j++) {
-			if (temp.data[j][i]) {//µÚiÁĞµÚjĞĞÔªËØ²»Îª0
+			if (temp.data[j][i]) {//ç¬¬iåˆ—ç¬¬jè¡Œå…ƒç´ ä¸ä¸º0
 				for (int k = j + 1; k < row; k++) {
 					matrix ele;
-					ele.matrix_create_3(row, k + 1, j + 1, fraction(0) - temp.data[k][i] / temp.data[j][i]);//Éú³ÉµÚÈıÖÖ³õµÈ¾ØÕó
+					ele.matrix_create_3(row, k + 1, j + 1, fraction(0) - temp.data[k][i] / temp.data[j][i]);//ç”Ÿæˆç¬¬ä¸‰ç§åˆç­‰çŸ©é˜µ
 					temp = ele * temp;
 				}
 				if (num != j) {
@@ -43,22 +43,22 @@ matrix matrix::matrix_simplify_1() {
 	return temp;
 }
 
-//Ãû³Æ£ºmatrix_simplify_2»¯¼òº¯Êı
-//¹¦ÄÜ£º½«¾ØÕó»¯¼òÎª¼ò»¯ĞĞ½×ÌİĞÎ¾ØÕó²¢´æ´¢
-//²ÎÊı£ºÎŞ
-//·µ»ØÖµ£º¼ò»¯ĞĞ½×ÌİĞÎ¾ØÕó
+//åç§°ï¼šmatrix_simplify_2åŒ–ç®€å‡½æ•°
+//åŠŸèƒ½ï¼šå°†çŸ©é˜µåŒ–ç®€ä¸ºç®€åŒ–è¡Œé˜¶æ¢¯å½¢çŸ©é˜µå¹¶å­˜å‚¨
+//å‚æ•°ï¼šæ— 
+//è¿”å›å€¼ï¼šç®€åŒ–è¡Œé˜¶æ¢¯å½¢çŸ©é˜µ
 matrix matrix::matrix_simplify_2(int *the_number_of_pivots) {
 	matrix temp;
 	temp.matrix_create(); 
 	temp = *this;
-//	temp.name = name + "_2S";//ÓÃÓÚÃüÃû»¯¼òºóµÃµ½µÄĞĞ½×ÌİĞÍ¾ØÕó
-	int num = 0;//ÓÃÓÚÈ·¶¨ĞĞ½×ÌİÒÑ¾­µ½´ïÄÄÒ»ĞĞ
+//	temp.name = name + "_2S";//ç”¨äºå‘½ååŒ–ç®€åå¾—åˆ°çš„è¡Œé˜¶æ¢¯å‹çŸ©é˜µ
+	int num = 0;//ç”¨äºç¡®å®šè¡Œé˜¶æ¢¯å·²ç»åˆ°è¾¾å“ªä¸€è¡Œ
 	for (int i = 0; i < col; i++) {
 		for (int j = num; j < row; j++) {
-			if (temp.data[j][i]) {//µÚiÁĞµÚjĞĞÔªËØ²»Îª0
+			if (temp.data[j][i]) {//ç¬¬iåˆ—ç¬¬jè¡Œå…ƒç´ ä¸ä¸º0
 				for (int k = j + 1; k < row; k++) {
 					matrix ele;
-					ele.matrix_create_3(row, k + 1, j + 1, fraction(0) - temp.data[k][i] / temp.data[j][i]);//Éú³ÉµÚÈıÖÖ³õµÈ¾ØÕó
+					ele.matrix_create_3(row, k + 1, j + 1, fraction(0) - temp.data[k][i] / temp.data[j][i]);//ç”Ÿæˆç¬¬ä¸‰ç§åˆç­‰çŸ©é˜µ
 					temp = ele * temp;
 				}
 				if (num != j) {
@@ -96,12 +96,12 @@ matrix matrix::matrix_simplify_2(int *the_number_of_pivots) {
 	return temp;
 }
 
-////Ãû³Æ£ºmatrix_simplify_3»¯¼òº¯Êı
-////¹¦ÄÜ£º½«¾ØÕó»¯¼òÎªÏàµÖ±ê×¼ĞÍ²¢´æ´¢
-////²ÎÊı£ºÎŞ
+////åç§°ï¼šmatrix_simplify_3åŒ–ç®€å‡½æ•°
+////åŠŸèƒ½ï¼šå°†çŸ©é˜µåŒ–ç®€ä¸ºç›¸æŠµæ ‡å‡†å‹å¹¶å­˜å‚¨
+////å‚æ•°ï¼šæ— 
 //void matrix::matrix_simplify_3() {
 //	if (matrix_search(name) == -1) {
-//		cout << " Not Found" << endl;//Èç¹ûÃ»ÓĞÕÒµ½£¬Êä³öÌáÊ¾
+//		cout << " Not Found" << endl;//å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¾“å‡ºæç¤º
 //		return;
 //	}
 //	else {
@@ -111,14 +111,14 @@ matrix matrix::matrix_simplify_2(int *the_number_of_pivots) {
 //			temp.data[i] = new double[col];
 //		}
 //		temp = *this;
-//		temp.name = name + "_3S";//ÓÃÓÚÃüÃû»¯¼òºóµÃµ½µÄĞĞ½×ÌİĞÍ¾ØÕó
-//		int num = 0;//ÓÃÓÚÈ·¶¨ĞĞ½×ÌİÒÑ¾­µ½´ïÄÄÒ»ĞĞ
+//		temp.name = name + "_3S";//ç”¨äºå‘½ååŒ–ç®€åå¾—åˆ°çš„è¡Œé˜¶æ¢¯å‹çŸ©é˜µ
+//		int num = 0;//ç”¨äºç¡®å®šè¡Œé˜¶æ¢¯å·²ç»åˆ°è¾¾å“ªä¸€è¡Œ
 //		for (int i = 0; i < col; i++) {
 //			for (int j = num; j < row; j++) {
-//				if (temp.data[j][i]) {//µÚiÁĞµÚjĞĞÔªËØ²»Îª0
+//				if (temp.data[j][i]) {//ç¬¬iåˆ—ç¬¬jè¡Œå…ƒç´ ä¸ä¸º0
 //					for (int k = j + 1; k < row; k++) {
 //						matrix ele;
-//						ele.matrix_create_3(row, k + 1, j + 1, -temp.data[k][i] / temp.data[j][i]);//Éú³ÉµÚÈıÖÖ³õµÈ¾ØÕó
+//						ele.matrix_create_3(row, k + 1, j + 1, -temp.data[k][i] / temp.data[j][i]);//ç”Ÿæˆç¬¬ä¸‰ç§åˆç­‰çŸ©é˜µ
 //						temp = ele * temp;
 //					}
 //					if (num != j) {
@@ -135,59 +135,59 @@ matrix matrix::matrix_simplify_2(int *the_number_of_pivots) {
 //			}
 //		}
 //		matrix TEMP;
-//		TEMP.matrix_create(row, col);//Éú³ÉÒ»¸öÁã¾ØÕó
+//		TEMP.matrix_create(row, col);//ç”Ÿæˆä¸€ä¸ªé›¶çŸ©é˜µ
 //		for (int i = 0; i < num; i++) {
-//			TEMP.data[i][i] = 1;//½«Áã¾ØÕó¸ÄÎªÒ»¸öÖÈÎªĞĞ½×ÌİĞÎ¾ØÕó·ÇÁãĞĞÊınum¼õÒ»
+//			TEMP.data[i][i] = 1;//å°†é›¶çŸ©é˜µæ”¹ä¸ºä¸€ä¸ªç§©ä¸ºè¡Œé˜¶æ¢¯å½¢çŸ©é˜µéé›¶è¡Œæ•°numå‡ä¸€
 //		}
-//		TEMP.matrix_store();//´æ´¢
+//		TEMP.matrix_store();//å­˜å‚¨
 //		TEMP.matrix_output();
 //		cout << "\n";
 //	}
 //}
 
 
-//Ãû³Æ£ºmatrix_detĞĞÁĞÊ½º¯Êı
-//¹¦ÄÜ£ºÇó³ö·½ÕóĞĞÁĞÊ½µÄÖµ
-//²ÎÊı£ºÎŞ
-//·µ»ØÖµ£º¾ØÕóµÄĞĞÁĞÊ½£¨double£© 
+//åç§°ï¼šmatrix_detè¡Œåˆ—å¼å‡½æ•°
+//åŠŸèƒ½ï¼šæ±‚å‡ºæ–¹é˜µè¡Œåˆ—å¼çš„å€¼
+//å‚æ•°ï¼šæ— 
+//è¿”å›å€¼ï¼šçŸ©é˜µçš„è¡Œåˆ—å¼ï¼ˆdoubleï¼‰ 
 fraction matrix::matrix_det() {
-	matrix temp = matrix_simplify_1();//»¯¼ò¾ØÕóÎªÉÏÈı½Ç¾ØÕó
+	matrix temp = matrix_simplify_1();//åŒ–ç®€çŸ©é˜µä¸ºä¸Šä¸‰è§’çŸ©é˜µ
 	fraction result(1);
 	for (int i = 0; i < row; i++) {
-		result = result * temp.data[i][i];//¶Ô½ÇÏßÔªËØÖµ»ı
+		result = result * temp.data[i][i];//å¯¹è§’çº¿å…ƒç´ å€¼ç§¯
 	}
 	return result;
 }
 
-//Ãû³Æ£ºmatrix_transpose×ªÖÃº¯Êı
-//¹¦ÄÜ£º×ªÖÃ¾ØÕó 
-//²ÎÊı£ºÎŞ
-//·µ»ØÖµ£º×ªÖÃºóµÄ¾ØÕó 
+//åç§°ï¼šmatrix_transposeè½¬ç½®å‡½æ•°
+//åŠŸèƒ½ï¼šè½¬ç½®çŸ©é˜µ 
+//å‚æ•°ï¼šæ— 
+//è¿”å›å€¼ï¼šè½¬ç½®åçš„çŸ©é˜µ 
 matrix matrix::matrix_transpose() {
 	matrix temp;
 	temp.matrix_create(col, row);
 	for (int i = 0; i < col; i++) {
 	    for (int j = 0; j < row; j++) {
-			temp.data[i][j] = data[j][i];//ĞĞÁĞµ÷»»
+			temp.data[i][j] = data[j][i];//è¡Œåˆ—è°ƒæ¢
 	    }
 	}
 	return temp;
 }
 
-//Ãû³Æ£ºmatrix_matrix_inverseÄæ¾ØÕóº¯Êı
-//¹¦ÄÜ£º¾ØÕóÇóÄæ 
-//²ÎÊı£ºÎŞ
-//·µ»ØÖµ£ºÄæ¾ØÕó
+//åç§°ï¼šmatrix_matrix_inverseé€†çŸ©é˜µå‡½æ•°
+//åŠŸèƒ½ï¼šçŸ©é˜µæ±‚é€† 
+//å‚æ•°ï¼šæ— 
+//è¿”å›å€¼ï¼šé€†çŸ©é˜µ
 matrix matrix::matrix_inverse() {
 	matrix Inverse;
 	Inverse.matrix_create(row, col);
 	if (row != col)  {
 		cout << "Error: Matrix dimensions must agree for inverse operations." << endl;
         calculate_success = false;
-        return Inverse; // ·µ»ØÁã¾ØÕó
+        return Inverse; // è¿”å›é›¶çŸ©é˜µ
 	}
 	else if (matrix_det() == fraction(0)) {
-		cout << "Error: Det = 0" << endl;//²»¿ÉÄæ£¬²»·ûºÏÒªÇó£¬ÍË³ö
+		cout << "Error: Det = 0" << endl;//ä¸å¯é€†ï¼Œä¸ç¬¦åˆè¦æ±‚ï¼Œé€€å‡º
 		calculate_success = false;
 		return Inverse;
 	}
@@ -196,18 +196,18 @@ matrix matrix::matrix_inverse() {
 		matrix temp;
 		temp.matrix_create(); 
 		temp = *this;
-		int num = 0;//ÓÃÓÚÈ·¶¨ĞĞ½×ÌİÒÑ¾­µ½´ïÄÄÒ»ĞĞ
+		int num = 0;//ç”¨äºç¡®å®šè¡Œé˜¶æ¢¯å·²ç»åˆ°è¾¾å“ªä¸€è¡Œ
 		for (int i = 0; i < col; i++) {
 			for (int j = num; j < row; j++) {
-				if (temp.data[j][i]) {//µÚiÁĞµÚjĞĞÔªËØ²»Îª0
+				if (temp.data[j][i]) {//ç¬¬iåˆ—ç¬¬jè¡Œå…ƒç´ ä¸ä¸º0
 					matrix ele2;
-					ele2.matrix_create_2(row, j + 1, fraction(1) / temp.data[j][i]);//Éú³ÉµÚ¶şÖÖ³õµÈ¾ØÕó
+					ele2.matrix_create_2(row, j + 1, fraction(1) / temp.data[j][i]);//ç”Ÿæˆç¬¬äºŒç§åˆç­‰çŸ©é˜µ
 					temp = ele2 * temp;
 					Inverse = ele2 * Inverse;
 					for (int k = 0; k < row; k++) {	
 						if (k != j) {
 							matrix ele3;
-							ele3.matrix_create_3(row, k + 1, j + 1, - temp.data[k][i]);//Éú³ÉµÚÈıÖÖ³õµÈ¾ØÕó
+							ele3.matrix_create_3(row, k + 1, j + 1, - temp.data[k][i]);//ç”Ÿæˆç¬¬ä¸‰ç§åˆç­‰çŸ©é˜µ
 							temp = ele3 * temp;
 							Inverse = ele3 * Inverse;
 						}
@@ -241,16 +241,36 @@ matrix matrix::matrix_inverse() {
 	}
 }
 
+//åç§°ï¼šmatrix_adjoint ä¼´éšçŸ©é˜µ
+//åŠŸèƒ½ï¼šè®¡ç®—ä¼´éšçŸ©é˜µ
+//å‚æ•°ï¼šæ— 
+matrix matrix::matrix_adjoint(){
+	fraction det=matrix_det();
+    if(det==fraction(0)) {
+    	cout << "Error: Det = 0" << endl;
+        return matrix();
+    }
 
-//Ãû³Æ£ºtranspose×ªÖÃº¯Êı£¨Ç°¶Ë£© 
-//¹¦ÄÜ£º×ªÖÃ¾ØÕó 
-//²ÎÊı£ºÎŞ
+	matrix temp=matrix_inverse();
+    matrix adjoint;
+    adjoint.matrix_create(row, col);
+	for(int i=0;i<row;i++){
+		for(int j=0;j<col;j++){
+			adjoint.data[i][j]=det*temp.data[i][j];
+		}
+	}
+    return adjoint;
+}
+
+//åç§°ï¼štransposeè½¬ç½®å‡½æ•°ï¼ˆå‰ç«¯ï¼‰ 
+//åŠŸèƒ½ï¼šè½¬ç½®çŸ©é˜µ 
+//å‚æ•°ï¼šæ— 
 void transpose() {
 	cout << "Please enter your matrix name : ";
 	string na;
     cin >> na;
 	if (matrix_search(na) == -1){
-	    cout << "Not Found" << endl; // Èç¹ûÃ»ÓĞÕÒµ½£¬Êä³öÌáÊ¾
+	    cout << "Not Found" << endl; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¾“å‡ºæç¤º
 	    return;
 	}
 	else {
@@ -260,19 +280,19 @@ void transpose() {
 	}
 }
 
-//Ãû³Æ£ºdetĞĞÁĞÊ½º¯Êı£¨Ç°¶Ë£© 
-//¹¦ÄÜ£ºÇó³ö·½ÕóĞĞÁĞÊ½µÄÖµ
-//²ÎÊı£ºÎŞ
+//åç§°ï¼šdetè¡Œåˆ—å¼å‡½æ•°ï¼ˆå‰ç«¯ï¼‰ 
+//åŠŸèƒ½ï¼šæ±‚å‡ºæ–¹é˜µè¡Œåˆ—å¼çš„å€¼
+//å‚æ•°ï¼šæ— 
 void det() {
 	cout << "Please enter your matrix name : ";
 	string na;
     cin >> na;
 	if (matrix_search(na) == -1){
-	    cout << "Not Found" << endl; // Èç¹ûÃ»ÓĞÕÒµ½£¬Êä³öÌáÊ¾
+	    cout << "Not Found" << endl; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¾“å‡ºæç¤º
 	    return;
 	}
 	else if (matlist[matrix_search(na)].row != matlist[matrix_search(na)].col) {
-		cout << "Not a square matrix" << endl;//²»ÊÇ·½Õó£¬²»·ûºÏÒªÇó£¬ÍË³ö
+		cout << "Not a square matrix" << endl;//ä¸æ˜¯æ–¹é˜µï¼Œä¸ç¬¦åˆè¦æ±‚ï¼Œé€€å‡º
 		return;
 	}
 	else {
@@ -285,9 +305,9 @@ void det() {
 	}
 }
 
-//Ãû³Æ£ºmatrix_calculate ¼ÆËãº¯Êı
-//¹¦ÄÜ£ºÍê³ÉÓÃ»§ÓĞ¹Ø¾ØÕóÔËËãµÄËãÊ½ 
-//²ÎÊı£ºÎŞ
+//åç§°ï¼šmatrix_calculate è®¡ç®—å‡½æ•°
+//åŠŸèƒ½ï¼šå®Œæˆç”¨æˆ·æœ‰å…³çŸ©é˜µè¿ç®—çš„ç®—å¼ 
+//å‚æ•°ï¼šæ— 
 void matrix_calculate() {
 	string line;
 	bool store = false;
@@ -296,7 +316,7 @@ void matrix_calculate() {
 	cout << "or : m1 * m2 + m2 ^ 2 * m1 ^ -1 (calculate only)" << endl;
 	getline(cin, line);
 	
-	// ´´½¨Ò»¸ö×Ö·û´®Á÷¶ÔÏó
+	// åˆ›å»ºä¸€ä¸ªå­—ç¬¦ä¸²æµå¯¹è±¡
 	istringstream iss(line);
 	string word;
 	vector<string> mat;
@@ -304,7 +324,7 @@ void matrix_calculate() {
 	matrix temp;
 	temp.matrix_create(); 
 
-    // Ê¹ÓÃÑ­»·¶ÁÈ¡Ã¿¸öµ¥´Ê
+    // ä½¿ç”¨å¾ªç¯è¯»å–æ¯ä¸ªå•è¯
 	while (iss >> word) {
 		if (word == "+" || word == "-" || word == "*" || word == "^"){
 			op.push_back(word); 
@@ -318,7 +338,7 @@ void matrix_calculate() {
 		cout << "Error" << endl;
 		return;
 	}
-	vector<matrix> mat_cal;//½«Ãû×Ö×ª»¯Îª¾ØÕó 
+	vector<matrix> mat_cal;//å°†åå­—è½¬åŒ–ä¸ºçŸ©é˜µ 
 	for (int i = store; i < mat.size(); i++){
 		if (i - store < op.size() && op[i - store] == "^" && matrix_search(mat[i]) != -1){
 			matrix temp;
