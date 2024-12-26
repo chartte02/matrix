@@ -44,6 +44,8 @@ int main() {
 			det();
 		} else if (function == "oth") {
 			oth();
+		} else if (function == "eig") {
+			eig();
 		} else if (function == "list") {
 		    show_list();
 		} else if (function == "exit") {

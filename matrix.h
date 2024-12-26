@@ -17,6 +17,7 @@ using namespace std;
 extern int n;//现有矩阵个数 
 extern bool fraction_fail;
 extern bool calculate_success;
+extern int precision;
 
 class fraction {
 public:	
@@ -43,6 +44,13 @@ public:
 		else {
 			den = 1ll;
 		}
+//		while (num >= pow(10, precision) || den >= pow(10, precision)){
+//			num /= 10;
+//			den /= 10;
+//			if (den < 1000){
+//				break;
+//			}
+//		}
 	}
 	long long abs(long long x){//取绝对值 
 		if (x < 0) {
@@ -50,7 +58,7 @@ public:
 		}
 		return x;
 	}
-	fraction(long long n = 1ll, long long d = 1ll) : num(n), den(d) {//构造函数 
+	fraction(long long n = 1ll, long long d = 1ll) : num(n), den(d) {//构造函数
 		if (den == 0){
 			fraction_fail = 1;
 			cout << "Error : the denominator is 0 " << endl;
@@ -64,23 +72,8 @@ public:
 	}
 	fraction(int n) : num(n), den(1ll) {}//int转fraction
 	fraction(double n){//double转fraction 
-		int len, x;
-		x = n / 1;
-		den = 1;
-		for (len = 0; ; len++){
-			x = n / 1;
-			if (n != x){
-				n *= 10;
-				den *= 10;
-			} else{
-				break;
-			}
-			if (len == 7){
-				break;
-			}
-		}
-		x = n / 1;
-		num = x;
+		den = 1 * pow(10, precision);
+		num = n * pow(10, precision);
 		fraction_reduct();
 	}
 	void fraction_create(){//生成函数 
@@ -100,11 +93,13 @@ public:
 		num = other.num;
 	}
 	fraction operator+(const fraction &other){//+运算符重载 
-		fraction result(num * other.den + den * other.num, den * other.den);
+		double x = double(*this) + double(other);
+		fraction result(x);
 		return result;
 	}
 	fraction operator-(const fraction &other){//-运算符重载 
-		fraction result(num * other.den - den * other.num, den * other.den);
+		double x = double(*this) - double(other);
+		fraction result(x);
 		return result;
 	}
 	fraction operator-(){//-运算符重载 
@@ -112,11 +107,13 @@ public:
 		return result;
 	}
 	fraction operator*(const fraction &other){//*运算符重载 
-		fraction result(num * other.num, den * other.den);
+		double x = double(*this) * double(other);
+		fraction result(x);
 		return result;
 	}
 	fraction operator*(const int &other){//*运算符重载 
-		fraction result(num * other, den);
+		double x = double(*this) * other;
+		fraction result(x);
 		return result;
 	}
 	fraction operator/(const fraction &other){// / 运算符重载 
@@ -124,19 +121,22 @@ public:
 			calculate_success = false;
 			return *this;
 		}
-		fraction result(num * other.den, den * other.num);
+		double x = double(*this) / double(other);
+		fraction result(x);
 		return result;
 	}
 	fraction& operator+=(const fraction &other){//+=
-		num = num * other.den + den * other.num;
-		den = den * other.den;
-		fraction_reduct();
+		double x = double(*this) + double(other);
+		fraction result(x);
+		num = result.num;
+		den = result.den;
 		return *this;
 	}
 	fraction& operator-=(const fraction &other){//-=
-		num = num * other.den - den * other.num;
-		den = den * other.den;
-		fraction_reduct();
+		double x = double(*this) - double(other);
+		fraction result(x);
+		num = result.num;
+		den = result.den;
 		return *this;
 	}
 	explicit operator bool() const {//fraction转bool 
@@ -267,6 +267,9 @@ public:
     matrix matrix_simplify_2(int *the_number_of_pivots=nullptr);//化简为简化行阶梯形矩阵
     void matrix_simplify_3();
     fraction matrix_det();//行列式
+    matrix matrix_ortho_gs();//正交化
+	matrix matrix_R();//QR分解中的R 
+	matrix matrix_eigenvalue();//特征值 
 
     void matrix_modify_name(string na);
     matrix matrix_intercept_row(const matrix&m,int r1,int r2);
@@ -288,4 +291,5 @@ void output();//输出函数（前端）
 void del();//删除函数
 void clear();//清空函数
 void oth();
+void eig();
 #endif

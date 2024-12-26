@@ -7,6 +7,7 @@ extern bool fraction_fail;
 extern bool calculate_success;
 
 
+
 // ¿½±´¹¹Ôìº¯Êý
 matrix::matrix(const matrix &other) {
 	name = other.name;
