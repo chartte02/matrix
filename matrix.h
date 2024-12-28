@@ -293,4 +293,8 @@ void del();//删除函数
 void clear();//清空函数
 void oth();
 void eig();
+void modify();
+void intercept();
+void inverse();
+void create();
 #endif
