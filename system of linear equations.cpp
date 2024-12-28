@@ -78,10 +78,11 @@ bool is_all_zero(const matrix&m);
           temp=m1.create_argumentation(m1, m2);
           matrix mm=temp;
 
-          temp=temp.matrix_simplify_2(the_number_of_pivots);
+          temp=temp.matrix_simplify_2();
           mm=mm.matrix_simplify_1();
-          for(int i=0;i < mm.row - the_number+1;i++) {
-             if(mm.data[the_number-1+i][mm.col-1]!=fraction(0)) {
+          m1.matrix_simplify_2(the_number_of_pivots);
+          for(int i=0;i < mm.row - the_number;i++) {
+             if(mm.data[the_number+i][mm.col-1]!=fraction(0)) {
                 cout<<"The system doesn't have solution."<<endl;
                 return;
              }
