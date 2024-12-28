@@ -30,20 +30,25 @@
   		} else if (function == "clear") {
   		    clear();
   		} else if (function == "create") {
-  		    cout << "Please enter your matrix kind : ";
-  		    string kind;
-  		    //未完成
+  			create();
   		} else if (function == "trans") {
   		    transpose();
   		} else if (function == "cal") {
   			cin.ignore(100, '\n');
   			matrix_calculate();
   		} else if (function == "mod") {
-
+  			modify();
   		} else if (function == "det") {
   			det();
-  		} else if (function == "list") {
+  		}
+  		else if(function == "intercept"){
+  			intercept();
+  		}
+  		else if (function == "list") {
   		    show_list();
+  		}
+  		else if(function == "inv") {
+  			inverse();
   		}
   		else if(function == "solve") {
   			cout << "Please enter the name of the first coefficient matrix : ";
@@ -78,6 +83,9 @@
   	cout << "list -- to get matrix name list" << endl;
   	cout << "exit -- to end the program" << endl;
   	cout << "solve -- to solve your linear system of equtions" <<endl;
+  	cout << "create -- to move into create mode" <<endl;
+  	cout << "intercept -- to intercept a matrix" << endl;
+  	cout << "inv -- to create the inverse matrix of your matrix"<<endl;
   }
 
   void show_list() {//矩阵列表栏
