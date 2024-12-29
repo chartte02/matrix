@@ -62,9 +62,13 @@
   			}
   			else cout <<"Not found."<<endl;
   		}
-  			else if (function == "exit") {
+  		else if (function == "exit") {
   		    return 0;
-  		} else {
+  		} else if (function == "oth") {
+  				oth();
+  		} else if (function == "eig") {
+  				eig();
+  		}else {
   		    cout << "Invalid command. " << endl;
   		    cout << "help -- to get function list" << endl;
   		}
@@ -86,6 +90,8 @@
   	cout << "create -- to move into create mode" <<endl;
   	cout << "intercept -- to intercept a matrix" << endl;
   	cout << "inv -- to create the inverse matrix of your matrix"<<endl;
+  	cout << "oth -- to orthogonalize the matrix Schmidt"<<endl;
+  	cout << "eig -- to get the eigenvalue of the matrix"<<endl;
   }
 
   void show_list() {//矩阵列表栏
