@@ -9,6 +9,85 @@ extern vector<matrix> matlist;//矩阵数组
 extern int n;
 extern bool calculate_success;
 
+//加法运算符重载
+matrix matrix::operator+(const matrix& other) {
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	if (row != other.row || col != other.col) {
+        cout << "Error: Matrix dimensions must agree for addition." << endl;
+        calculate_success = false;
+        return result; // 返回零矩阵 
+    }
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			result.data[i][j] = data[i][j] + other.data[i][j];
+		}
+	}
+	return result;
+}
+
+//减法运算符重载
+matrix matrix::operator-(const matrix& other) {
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	if (row != other.row || col != other.col) {
+        cout << "Error: Matrix dimensions must agree for subtraction." << endl;
+        calculate_success = false;
+        return result; // 返回零矩阵 
+    }
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			result.data[i][j] = data[i][j] - other.data[i][j];
+		}
+	}
+	return result;
+}
+
+//乘法运算符重载
+matrix matrix::operator*(const matrix& other) {
+	matrix result(row, other.col);
+	result.matrix_create(row, other.col);
+	if (col != other.row) {
+		cout << "Error: Matrix dimensions must agree for multiplication." << endl;
+        calculate_success = false;
+        return result; // 返回零矩阵 
+	}
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < other.col; j++) {
+			for (int k = 0; k < col; k++) {
+				result.data[i][j] += data[i][k] * other.data[k][j];
+			}
+		}
+	}
+	return result;
+}
+
+//幂运算符重载
+matrix matrix::operator^(int k) {
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	if (row != col || k < 0) {
+		cout << "Error: Matrix dimensions must agree for power operations." << endl;
+        calculate_success = false;
+        return result; // 返回零矩阵
+	}
+	//初始化为单位矩阵
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			if (i == j) {
+				result.data[i][j] = 1;
+			}
+			else result.data[i][j] = 0;
+		}
+	}
+	matrix tmp(*this);
+	for (int i = 1; i <= k; i++) {
+		result = result * tmp;
+	}
+	
+	return result;
+}
+
 //名称：matrix_simplify_1化简函数
 //功能：将矩阵化简为行阶梯形矩阵并存储
 //参数：无
