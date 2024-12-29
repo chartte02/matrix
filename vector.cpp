@@ -1,6 +1,6 @@
 #include "matrix.h"
 extern vector<matrix> matlist;
-extern int n;//ÏÖÓÐ¾ØÕó¸öÊý 
+extern int n;//çŽ°æœ‰çŸ©é˜µä¸ªæ•° 
 extern bool fraction_fail;
 extern bool calculate_success;
 	
@@ -10,7 +10,7 @@ public:
 	int n;
 	fraction norm;
 	vec(int n = 0): n(n){
-		data = new fraction [n];//ÉêÇërow¸öÊý×éÖ¸Õë¿Õ¼ä 
+		data = new fraction [n];//ç”³è¯·rowä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´ 
 		if (!data) {
 	    	cout << "Error: memory is full" << endl;
 			return; 
@@ -21,29 +21,29 @@ public:
 	    norm = 0;
 	}
 	~vec() {
-        delete[] data; // ÊÍ·ÅÄÚ´æ
+        delete[] data; // é‡Šæ”¾å†…å­˜
     }
-    vec(const vec &other){//¿½±´¹¹Ôìº¯Êý 
+    vec(const vec &other){//æ‹·è´æž„é€ å‡½æ•° 
 		n = other.n;
 		norm = other.norm;
-        // ·ÖÅäÐÂµÄÄÚ´æ
+        // åˆ†é…æ–°çš„å†…å­˜
         data = new fraction[n];
         for (int i = 0; i < n; i++) {
             data[i] = other.data[i];
         }
 	}
-	vec& operator=(const vec &other){//¸³ÖµÔËËã·ûÖØÔØ 
+	vec& operator=(const vec &other){//èµ‹å€¼è¿ç®—ç¬¦é‡è½½ 
         delete[] data;
 		n = other.n;
 		norm = other.norm;
-        // ·ÖÅäÐÂµÄÄÚ´æ
+        // åˆ†é…æ–°çš„å†…å­˜
         data = new fraction[n];
         for (int i = 0; i < n; i++) {
             data[i] = other.data[i];
         }
     	return *this;
 	}
-	vec operator+(const vec &other){//+ÔËËã·ûÖØÔØ 
+	vec operator+(const vec &other){//+è¿ç®—ç¬¦é‡è½½ 
 		vec result(n);
 		if (n != other.n){
 			cout << "Error: Vector dimensions must agree for addition." << endl;
@@ -55,7 +55,7 @@ public:
 		}
 		return result;
 	}
-	vec operator-(const vec &other){//+ÔËËã·ûÖØÔØ 
+	vec operator-(const vec &other){//+è¿ç®—ç¬¦é‡è½½ 
 		vec result(n);
 		if (n != other.n){
 			cout << "Error: Vector dimensions must agree for subtraction." << endl;
@@ -67,21 +67,28 @@ public:
 		}
 		return result;
 	}
-	vec operator-(){//-ÔËËã·ûÖØÔØ 
+	vec operator-(){//-è¿ç®—ç¬¦é‡è½½ 
 		vec result(n);
 		for (int i = 0; i < n; i++) {
 			result.data[i] = -data[i];
 		}
 		return result;
 	}
-	vec operator*(const fraction &other){//*ÔËËã·ûÖØÔØ 
+	vec operator*(const fraction &other){//*è¿ç®—ç¬¦é‡è½½ 
 		vec result(n);
 		for (int i = 0; i < n; i++) {
 			result.data[i] = data[i] * other;
 		}
 		return result;
 	}
-	fraction operator*(const vec &other){//*ÔËËã·ûÖØÔØ 
+	vec operator/(const fraction &other){//*è¿ç®—ç¬¦é‡è½½ 
+		vec result(n);
+		for (int i = 0; i < n; i++) {
+			result.data[i] = data[i] / other;
+		}
+		return result;
+	}
+	fraction operator*(const vec &other){//*è¿ç®—ç¬¦é‡è½½ 
 		fraction result = fraction(0);
 		if (n != other.n){
 			cout << "Error: Vector dimensions must agree for multiplication." << endl;
@@ -128,7 +135,6 @@ matrix matrix::matrix_ortho_gs(){
 		for (int j = 0; j < row; j++){
 			result.data[j][i] = aft[i].data[j];
 		}
-		
 	}
 	return result;
 }
@@ -138,7 +144,7 @@ void oth(){
 	string na;
     cin >> na;
 	if (matrix_search(na) == -1){
-	    cout << "Not Found" << endl; // Èç¹ûÃ»ÓÐÕÒµ½£¬Êä³öÌáÊ¾
+	    cout << "Not Found" << endl; // å¦‚æžœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¾“å‡ºæç¤º
 	    return;
 	}
 	else {
@@ -163,36 +169,141 @@ matrix matrix::matrix_eigenvalue(){
 	matrix t;
 	t.matrix_create();
 	t = *this;
-	for (int i = 0; i < 100; i++){
+//	eig_iteration(t);
+//	if (t == *this && t.col > 1){
+//		for (int i = 0; i < t.row; i++){
+//			t.data[i][0] = t.data[i][0] + t.data[i][1];
+//		}
+//	}
+	for (int i = 0; i < 10000; i++){
 		eig_iteration(t);
 	}
 	return t;
 }
-
+void eig_vec(matrix &pri, matrix &m);
 void eig(){
 	cout << "Please enter your matrix name : ";
 	string na;
     cin >> na;
 	if (matrix_search(na) == -1){
-	    cout << "Not Found" << endl; // Èç¹ûÃ»ÓÐÕÒµ½£¬Êä³öÌáÊ¾
+	    cout << "Not Found" << endl; // å¦‚æžœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¾“å‡ºæç¤º
 	    return;
 	}
 	if (matlist[matrix_search(na)].row != matlist[matrix_search(na)].col){
-		cout << "Not a square matrix" << endl;//²»ÊÇ·½Õó£¬²»·ûºÏÒªÇó£¬ÍË³ö
+		cout << "Not a square matrix" << endl;//ä¸æ˜¯æ–¹é˜µï¼Œä¸ç¬¦åˆè¦æ±‚ï¼Œé€€å‡º
 		return;
 	}
 	else {
 		matrix temp1 = matlist[matrix_search(na)].matrix_eigenvalue();
-//		matrix temp2;//ÌØÕ÷ÏòÁ¿ 
-//		temp2.matrix_create(temp1.row, temp1.row);
-//		for (int k = 0; k < temp1.row; k++) {
-//			temp2.data[k][k] = temp1.data[k][k];
+//		temp1.name = matlist[matrix_search(na)].name + "_eig";
+//		temp1.matrix_display(0, 1);
+//		for (int i = 0; i < temp1.row; i++){
+//			cout << double(temp1.data[i][i]) << endl;
 //		}
-		temp1.name = matlist[matrix_search(na)].name + "_eig";
-		temp1.matrix_display(0, 1);
-		for (int i = 0; i < temp1.row; i++){
-			cout << double(temp1.data[i][i]) << endl;
-		}
+		eig_vec(matlist[matrix_search(na)], temp1);
 		return;
 	}
+}
+
+void eig_vec(matrix &pri, matrix &m){
+	double lamda[m.row];
+	for (int i = 0; i < m.row; i++){
+		lamda[i] = double(m.data[i][i]);
+		cout << "lamda " << i + 1 << " = " << lamda[i] << endl;
+	}
+	sort(lamda, lamda + m.row);
+	fraction unique[m.row] = {0};
+	int len = 1;
+	unique[0] = fraction(lamda[0]);
+    for (int i = 1; i < m.row; i++) {
+    	double x = lamda[i] - lamda[i - 1];
+    	if (x > 0.0001){
+    		unique[len] = fraction(lamda[i]);
+        	len++;
+		} 
+    }
+//    for (int i = 1; i < m.row && double(lamda[i] - lamda[i - 1]) > 0.01; i++) {	
+//    	unique[len] = fraction(lamda[i]);
+//        len++;
+//        cout << 114;
+//    }
+	for (int i = 0; i < len; i++){
+		matrix temp1, temp2, temp3;
+		int pivot_count;
+		temp3.matrix_create(m.row, m.col);
+		temp2.matrix_create(m.row, m.col);
+		temp1.matrix_scalar(m.row, unique[i]);
+		cout << double(unique[i]) << " eigenvector is :" << endl;
+		temp2 = temp1 - pri;
+		temp3 = temp2.matrix_simplify_3(&pivot_count);
+//		cout << pivot_count;
+//		cout<<len<<endl;
+		matrix ans;
+		ans.matrix_create(m.row, m.col - pivot_count);
+		for (int i = 0; i < m.col - pivot_count; i++){
+			for (int j = 0; j < pivot_count; j++){
+				ans.data[j][i] = -temp3.data[j][i + pivot_count];
+			}
+			ans.data[pivot_count][i] = fraction(1); 
+		}
+		ans = ans.matrix_transpose();
+		for (int i = 0; i < ans.row; i++) {
+			cout << "[";
+        	for (int j = 0; j < ans.col; j++) {
+            	cout << double(ans.data[i][j]);
+				if (j < ans.col - 1) cout << ", ";
+        	} 
+        	cout << "]^T";
+        	cout << endl;
+		}
+	}
+}
+
+//åç§°ï¼šmatrix_simplify_3åŒ–ç®€å‡½æ•°
+//åŠŸèƒ½ï¼šå°†çŸ©é˜µåŒ–ç®€ä¸ºç®€åŒ–è¡Œé˜¶æ¢¯å½¢çŸ©é˜µå¹¶å­˜å‚¨
+//å‚æ•°ï¼šæ— 
+//è¿”å›žå€¼ï¼šç®€åŒ–è¡Œé˜¶æ¢¯å½¢çŸ©é˜µ
+matrix matrix::matrix_simplify_3(int *the_number_of_pivots) {
+	matrix temp;
+	temp.matrix_create(); 
+	temp = *this;
+	int num = 0;//ç”¨äºŽç¡®å®šè¡Œé˜¶æ¢¯å·²ç»åˆ°è¾¾å“ªä¸€è¡Œ
+	vector<vec> bef(row);
+	for (int i = 0; i < row; i++){
+		bef[i] = vec(col);
+		for (int j = 0; j < col; j++){
+			bef[i].data[j] = data[i][j];
+		}
+	}
+	for (int i = 0; i < col; i++) {
+		if (double(bef[i].data[i]) < 0.0001 && double(bef[i].data[i]) > -0.0001){
+			bef[i].data[i] = fraction(0);
+			bool flag = 1;
+			for (int j = i + 1; j < row; j++) {
+				if(bef[j].data[i]){
+					vec	temp;
+					temp = bef[j];
+					bef[j] = bef[i];
+					bef[i] = temp;
+					flag = 0;
+					break;
+				}
+			}
+			if (flag)	continue;
+		}	
+		bef[num] = bef[num] / bef[num].data[i];
+		for (int j = 0; j < row; j++) {
+			if (j != num){
+				bef[j] = bef[j] - bef[num] * bef[j].data[i];
+			}
+		}
+		num++;
+	}
+	*the_number_of_pivots = num;
+	for (int i = 0; i < row; i++){
+		for (int j = 0; j < col; j++){
+			temp.data[i][j] = bef[i].data[j];
+		}
+	}
+	return temp;
 }
