@@ -1,21 +1,19 @@
-//ÎÄ¼ş£ºmatrix.cpp 
+//æ–‡ä»¶ï¼šmatrix.cpp 
 #include "matrix.h"
 
-extern vector<matrix> matlist;//¾ØÕóÊı×é
-extern int n;//ÏÖÓĞ¾ØÕó¸öÊı 
+extern vector<matrix> matlist;//çŸ©é˜µæ•°ç»„
+extern int n;//ç°æœ‰çŸ©é˜µä¸ªæ•° 
 extern bool fraction_fail;
 extern bool calculate_success;
 
-
-
-// ¿½±´¹¹Ôìº¯Êı
+// æ‹·è´æ„é€ å‡½æ•°
 matrix::matrix(const matrix &other) {
 	name = other.name;
     row = other.row;
     col = other.col;
 	No = other.No;
 
-    // ·ÖÅäĞÂµÄÄÚ´æ
+    // åˆ†é…æ–°çš„å†…å­˜
 	data = new fraction*[row];
     if (!data) {
     	cout << "Error: memory is full" << endl;
@@ -25,31 +23,31 @@ matrix::matrix(const matrix &other) {
     for (int i = 0; i < row; i++) {
         data[i] = new fraction[col];
         for (int j = 0; j < col; j++) {
-            data[i][j] = other.data[i][j]; // ¸´ÖÆÊı¾İ
+            data[i][j] = other.data[i][j]; // å¤åˆ¶æ•°æ®
         }
     }
 }
 
-// ¸³ÖµÔËËã·ûÖØÔØ
+// èµ‹å€¼è¿ç®—ç¬¦é‡è½½
 matrix& matrix::operator=(const matrix &other) {
-    if (this != &other) { // ·ÀÖ¹×ÔÎÒ¸³Öµ
-        // ÊÍ·Å¾ÉµÄÄÚ´æ
+    if (this != &other) { // é˜²æ­¢è‡ªæˆ‘èµ‹å€¼
+        // é‡Šæ”¾æ—§çš„å†…å­˜
         for (int i = 0; i < row; i++) {
             delete[] data[i];
         }
         delete[] data;
 
-        // ¸´ÖÆÊı¾İ
+        // å¤åˆ¶æ•°æ®
         name = other.name;
         row = other.row;
         col = other.col;
 		No = other.No;
-        // ·ÖÅäĞÂµÄÄÚ´æ
+        // åˆ†é…æ–°çš„å†…å­˜
         data = new fraction*[row];
-//!´Ë´¦Î´¼ì²ânew 
+//!æ­¤å¤„æœªæ£€æµ‹new 
         for (int i = 0; i < row; i++) {
             data[i] = new fraction[col];
-//!´Ë´¦Î´¼ì²ânew
+//!æ­¤å¤„æœªæ£€æµ‹new
             for (int j = 0; j < col; j++) {
                 data[i][j] = other.data[i][j];
             }
@@ -58,7 +56,7 @@ matrix& matrix::operator=(const matrix &other) {
     return *this;
 }
 
-//ÏàµÈÔËËã·ûÖØÔØ
+//ç›¸ç­‰è¿ç®—ç¬¦é‡è½½
 bool matrix::operator==(const matrix& other) {
 	if (row != other.row || col != other.col){
 		return 0;
@@ -73,92 +71,13 @@ bool matrix::operator==(const matrix& other) {
 	return 1;
 }
 
-//¼Ó·¨ÔËËã·ûÖØÔØ
-matrix matrix::operator+(const matrix& other) {
-	matrix result(row, col);
-	result.matrix_create(row, col);
-	if (row != other.row || col != other.col) {
-        cout << "Error: Matrix dimensions must agree for addition." << endl;
-        calculate_success = false;
-        return result; // ·µ»ØÁã¾ØÕó 
-    }
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < col; j++) {
-			result.data[i][j] = data[i][j] + other.data[i][j];
-		}
-	}
-	return result;
-}
-
-//¼õ·¨ÔËËã·ûÖØÔØ
-matrix matrix::operator-(const matrix& other) {
-	matrix result(row, col);
-	result.matrix_create(row, col);
-	if (row != other.row || col != other.col) {
-        cout << "Error: Matrix dimensions must agree for subtraction." << endl;
-        calculate_success = false;
-        return result; // ·µ»ØÁã¾ØÕó 
-    }
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < col; j++) {
-			result.data[i][j] = data[i][j] - other.data[i][j];
-		}
-	}
-	return result;
-}
-
-//³Ë·¨ÔËËã·ûÖØÔØ
-matrix matrix::operator*(const matrix& other) {
-	matrix result(row, other.col);
-	result.matrix_create(row, other.col);
-	if (col != other.row) {
-		cout << "Error: Matrix dimensions must agree for multiplication." << endl;
-        calculate_success = false;
-        return result; // ·µ»ØÁã¾ØÕó 
-	}
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < other.col; j++) {
-			for (int k = 0; k < col; k++) {
-				result.data[i][j] += data[i][k] * other.data[k][j];
-			}
-		}
-	}
-	return result;
-}
-
-//ÃİÔËËã·ûÖØÔØ
-matrix matrix::operator^(int k) {
-	matrix result(row, col);
-	result.matrix_create(row, col);
-	if (row != col || k < 0) {
-		cout << "Error: Matrix dimensions must agree for power operations." << endl;
-        calculate_success = false;
-        return result; // ·µ»ØÁã¾ØÕó
-	}
-	//³õÊ¼»¯Îªµ¥Î»¾ØÕó
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < col; j++) {
-			if (i == j) {
-				result.data[i][j] = 1;
-			}
-			else result.data[i][j] = 0;
-		}
-	}
-	matrix tmp(*this);
-	for (int i = 1; i <= k; i++) {
-		result = result * tmp;
-	}
-	
-	return result;
-}
-
-// Îö¹¹º¯Êı
+// ææ„å‡½æ•°
 matrix::~matrix() {
     for (int i = 0; i < row; i++) {
         delete[] data[i];
-		data[i] = NULL;//¾ÍÊÇËû 
+		data[i] = NULL;//å°±æ˜¯ä»– 
     }
     delete[] data;
-	data = NULL;//»¹ÓĞËû 
+	data = NULL;//è¿˜æœ‰ä»– 
 }
 
