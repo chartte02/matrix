@@ -521,3 +521,150 @@ void matrix_calculate() {
 	return;
 }
 
+matrix matrix::matrix_ortho_gs(){
+	matrix result(row, col);
+	result.matrix_create(row, col);
+	vector<vec> bef(col);
+	vector<vec> aft(col);
+	for (int i = 0; i < col; i++){
+		bef[i] = vec(row);
+		aft[i] = vec(row);
+		for (int j = 0; j < row; j++){
+			bef[i].data[j] = data[j][i];
+			aft[i].data[j] = data[j][i];
+		}
+	}
+	for (int i = 0; i < col; i++){
+		for (int j = 0; j < i; j++){
+			aft[i] = aft[i] - aft[j] * ((bef[i] * aft[j]) / (aft[j] * aft[j]));
+		}
+		aft[i].get_norm();
+	}
+	for (int i = 0; i < col; i++){
+		aft[i] = aft[i] * (fraction(1) / aft[i].norm);
+		for (int j = 0; j < row; j++){
+			result.data[j][i] = aft[i].data[j];
+		}
+	}
+	return result;
+}
+
+void oth(){
+	cout << "Please enter your matrix name : ";
+	string na;
+    cin >> na;
+	if (matrix_search(na) == -1){
+	    cout << "Not Found" << endl; // 如果没有找到，输出提示
+	    return;
+	}
+	else {
+		matrix temp = matlist[matrix_search(na)].matrix_ortho_gs();
+		temp.name = matlist[matrix_search(na)].name + "_oth";
+		temp.matrix_display(0,1);
+	}
+}
+
+matrix matrix::matrix_R(){
+	matrix temp;
+	temp.matrix_create();
+	temp = matrix_ortho_gs();
+	return temp.matrix_inverse() * (*this);
+}
+
+void eig_iteration(matrix &m){
+	m = m.matrix_R() * m.matrix_ortho_gs();
+}
+
+matrix matrix::matrix_eigenvalue(){
+	matrix t;
+	t.matrix_create();
+	t = *this;
+//	eig_iteration(t);
+//	if (t == *this && t.col > 1){
+//		for (int i = 0; i < t.row; i++){
+//			t.data[i][0] = t.data[i][0] + t.data[i][1];
+//		}
+//	}
+	for (int i = 0; i < 10000; i++){
+		eig_iteration(t);
+	}
+	return t;
+}
+void eig_vec(matrix &pri, matrix &m);
+void eig(){
+	cout << "Please enter your matrix name : ";
+	string na;
+    cin >> na;
+	if (matrix_search(na) == -1){
+	    cout << "Not Found" << endl; // 如果没有找到，输出提示
+	    return;
+	}
+	if (matlist[matrix_search(na)].row != matlist[matrix_search(na)].col){
+		cout << "Not a square matrix" << endl;//不是方阵，不符合要求，退出
+		return;
+	}
+	else {
+		matrix temp1 = matlist[matrix_search(na)].matrix_eigenvalue();
+//		temp1.name = matlist[matrix_search(na)].name + "_eig";
+//		temp1.matrix_display(0, 1);
+//		for (int i = 0; i < temp1.row; i++){
+//			cout << double(temp1.data[i][i]) << endl;
+//		}
+		eig_vec(matlist[matrix_search(na)], temp1);
+		return;
+	}
+}
+
+void eig_vec(matrix &pri, matrix &m){
+	double lamda[m.row];
+	for (int i = 0; i < m.row; i++){
+		lamda[i] = double(m.data[i][i]);
+		cout << "lamda " << i + 1 << " = " << lamda[i] << endl;
+	}
+	sort(lamda, lamda + m.row);
+	fraction unique[m.row] = {0};
+	int len = 1;
+	unique[0] = fraction(lamda[0]);
+    for (int i = 1; i < m.row; i++) {
+    	double x = lamda[i] - lamda[i - 1];
+    	if (x > 0.0001){
+    		unique[len] = fraction(lamda[i]);
+        	len++;
+		} 
+    }
+//    for (int i = 1; i < m.row && double(lamda[i] - lamda[i - 1]) > 0.01; i++) {	
+//    	unique[len] = fraction(lamda[i]);
+//        len++;
+//        cout << 114;
+//    }
+	for (int i = 0; i < len; i++){
+		matrix temp1, temp2, temp3;
+		int pivot_count;
+		temp3.matrix_create(m.row, m.col);
+		temp2.matrix_create(m.row, m.col);
+		temp1.matrix_scalar(m.row, unique[i]);
+		cout << double(unique[i]) << " eigenvector is :" << endl;
+		temp2 = temp1 - pri;
+		temp3 = temp2.matrix_simplify_3(&pivot_count);
+//		cout << pivot_count;
+//		cout<<len<<endl;
+		matrix ans;
+		ans.matrix_create(m.row, m.col - pivot_count);
+		for (int i = 0; i < m.col - pivot_count; i++){
+			for (int j = 0; j < pivot_count; j++){
+				ans.data[j][i] = -temp3.data[j][i + pivot_count];
+			}
+			ans.data[pivot_count][i] = fraction(1); 
+		}
+		ans = ans.matrix_transpose();
+		for (int i = 0; i < ans.row; i++) {
+			cout << "[";
+        	for (int j = 0; j < ans.col; j++) {
+            	cout << double(ans.data[i][j]);
+				if (j < ans.col - 1) cout << ", ";
+        	} 
+        	cout << "]^T";
+        	cout << endl;
+		}
+	}
+}
