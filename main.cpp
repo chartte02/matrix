@@ -68,6 +68,8 @@
   				oth();
   		} else if (function == "eig") {
   				eig();
+  		}else if(function == "adj") {
+  			adjoint();
   		}else {
   		    cout << "Invalid command. " << endl;
   		    cout << "help -- to get function list" << endl;
@@ -92,6 +94,7 @@
   	cout << "inv -- to create the inverse matrix of your matrix"<<endl;
   	cout << "oth -- to orthogonalize the matrix Schmidt"<<endl;
   	cout << "eig -- to get the eigenvalue of the matrix"<<endl;
+  	cout << "adj -- to get the adjugate matrix of your matrix" << endl;
   }
 
   void show_list() {//矩阵列表栏
