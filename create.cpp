@@ -126,6 +126,20 @@ void create() {
 
 	}
 }
+
+void adjoint() {
+	cout << "Please input the name of the matrix:"<<endl;
+	string name;
+	cin >> name;
+	cout << "Please input the new name of the matrix:"<<endl;
+	string newname;
+	cin >> newname;
+	matrix m;
+	m=matlist[matrix_search(name)].matrix_adjoint();
+	m.matrix_modify_name(name);
+	m.matrix_store();
+}
+
 // 名称：matrix_create 生成函数（零矩阵）
 // 功能：生成已知行和列的零矩阵
 // 参数：行，列
