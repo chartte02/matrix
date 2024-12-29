@@ -175,54 +175,54 @@ matrix matrix::matrix_simplify_2(int *the_number_of_pivots) {
 	return temp;
 }
 
-////名称：matrix_simplify_3化简函数
-////功能：将矩阵化简为相抵标准型并存储
-////参数：无
-//void matrix::matrix_simplify_3() {
-//	if (matrix_search(name) == -1) {
-//		cout << " Not Found" << endl;//如果没有找到，输出提示
-//		return;
-//	}
-//	else {
-//		matrix temp;
-//		temp.data = new double* [row];
-//		for (int i = 0; i < row; i++) {
-//			temp.data[i] = new double[col];
-//		}
-//		temp = *this;
-//		temp.name = name + "_3S";//用于命名化简后得到的行阶梯型矩阵
-//		int num = 0;//用于确定行阶梯已经到达哪一行
-//		for (int i = 0; i < col; i++) {
-//			for (int j = num; j < row; j++) {
-//				if (temp.data[j][i]) {//第i列第j行元素不为0
-//					for (int k = j + 1; k < row; k++) {
-//						matrix ele;
-//						ele.matrix_create_3(row, k + 1, j + 1, -temp.data[k][i] / temp.data[j][i]);//生成第三种初等矩阵
-//						temp = ele * temp;
-//					}
-//					if (num != j) {
-//						for (int l = i; l < col; l++) {
-//							double x;
-//							x = temp.data[num][l];
-//							temp.data[num][l] = temp.data[j][l];
-//							temp.data[j][l] = x;
-//						}
-//					}
-//					num++;
-//					break;
-//				}
-//			}
-//		}
-//		matrix TEMP;
-//		TEMP.matrix_create(row, col);//生成一个零矩阵
-//		for (int i = 0; i < num; i++) {
-//			TEMP.data[i][i] = 1;//将零矩阵改为一个秩为行阶梯形矩阵非零行数num减一
-//		}
-//		TEMP.matrix_store();//存储
-//		TEMP.matrix_output();
-//		cout << "\n";
-//	}
-//}
+//名称：matrix_simplify_3化简函数
+//功能：将矩阵化简为简化行阶梯形矩阵并存储
+//参数：无
+//返回值：简化行阶梯形矩阵
+matrix matrix::matrix_simplify_3(int *the_number_of_pivots) {
+	matrix temp;
+	temp.matrix_create(); 
+	temp = *this;
+	int num = 0;//用于确定行阶梯已经到达哪一行
+	vector<vec> bef(row);
+	for (int i = 0; i < row; i++){
+		bef[i] = vec(col);
+		for (int j = 0; j < col; j++){
+			bef[i].data[j] = data[i][j];
+		}
+	}
+	for (int i = 0; i < col; i++) {
+		if (double(bef[i].data[i]) < 0.0001 && double(bef[i].data[i]) > -0.0001){
+			bef[i].data[i] = fraction(0);
+			bool flag = 1;
+			for (int j = i + 1; j < row; j++) {
+				if(bef[j].data[i]){
+					vec	temp;
+					temp = bef[j];
+					bef[j] = bef[i];
+					bef[i] = temp;
+					flag = 0;
+					break;
+				}
+			}
+			if (flag)	continue;
+		}	
+		bef[num] = bef[num] / bef[num].data[i];
+		for (int j = 0; j < row; j++) {
+			if (j != num){
+				bef[j] = bef[j] - bef[num] * bef[j].data[i];
+			}
+		}
+		num++;
+	}
+	*the_number_of_pivots = num;
+	for (int i = 0; i < row; i++){
+		for (int j = 0; j < col; j++){
+			temp.data[i][j] = bef[i].data[j];
+		}
+	}
+	return temp;
+}
 
 
 //名称：matrix_det行列式函数
