@@ -44,13 +44,6 @@ public:
 		else {
 			den = 1ll;
 		}
-//		while (num >= pow(10, precision) || den >= pow(10, precision)){
-//			num /= 10;
-//			den /= 10;
-//			if (den < 1000){
-//				break;
-//			}
-//		}
 	}
 	long long abs(long long x){//取绝对值 
 		if (x < 0) {
@@ -265,12 +258,12 @@ public:
     matrix matrix_inverse();//逆矩阵
     matrix matrix_simplify_1();//化简为行阶梯形矩阵
     matrix matrix_simplify_2(int *the_number_of_pivots=nullptr);//化简为简化行阶梯形矩阵
-    void matrix_simplify_3();
+    matrix matrix_simplify_3(int *the_number_of_pivots);
     fraction matrix_det();//行列式
     matrix matrix_adjoint();//伴随矩阵
     matrix matrix_ortho_gs();//正交化
-	matrix matrix_R();//QR分解中的R 
-	matrix matrix_eigenvalue();//特征值 
+    matrix matrix_R();//QR分解中的R 
+    matrix matrix_eigenvalue();//特征值 
 
     void matrix_modify_name(string na);
     matrix matrix_intercept_row(const matrix&m,int r1,int r2);
