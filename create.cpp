@@ -1,28 +1,161 @@
-//æ–‡ä»¶ï¼šcreate.cpp
+//ÎÄ¼ş£ºcreate.cpp
 /*
-å„ç§ç”ŸæˆçŸ©é˜µå‡½æ•°
+¸÷ÖÖÉú³É¾ØÕóº¯Êı
 */
 #include "matrix.h"
 
-extern vector<matrix> matlist;//çŸ©é˜µæ•°ç»„
+extern vector<matrix> matlist;//¾ØÕóÊı×é
 extern int n;
 
-// åç§°ï¼šmatrix_create ç”Ÿæˆå‡½æ•°ï¼ˆé›¶çŸ©é˜µï¼‰ 
-// åŠŸèƒ½ï¼šç”Ÿæˆå·²çŸ¥è¡Œå’Œåˆ—çš„é›¶çŸ©é˜µ 
-// å‚æ•°ï¼šè¡Œï¼Œåˆ— 
-void matrix::matrix_create(int r, int c) {//æ­¤å¤„é»˜è®¤å€¼éƒ½ä¸º0
+void create() {
+	while(true) {
+		cout << "Please input your choice:" << endl;
+		cout << "1 -- create a matrix with all the elements are made randomly."<<endl;
+		cout << "2 -- create a diagonal matrix with all the elements of the principle diagonal are made randomly."<<endl;
+		cout << "3 -- create an upper matrix with all the elements are made randomly"<<endl;
+		cout << "4 -- create a diagonal matrix. "<<endl;
+		cout << "5 -- create a scalar matrix"<<endl;
+		cout << "6 -- create an argumented matrix"<<endl;
+		cout << "0 -- exit"<<endl;
+		int choice;
+		cin >> choice;
+			if(choice == 1) {
+				int row, col;
+				double a,b;
+				matrix m;
+				string name;
+				cout << "Please input the name:"<<endl;
+				cin >> name;
+				cout << "Please input the row number:" << endl;
+				cin >> row;
+				cout << "Please input the column number:" << endl;
+				cin >> col;
+				cout << "Please input the lower bound:" << endl;
+				cin >> a;
+				cout << "Please input the upper bound:" << endl;
+				cin >> b;
+				m.matrix_create_random(row,col,a,b);
+				m.matrix_modify_name(name);
+				m.matrix_store();
+				m.matrix_display(1,1);
+			}
+			else if(choice == 2) {
+				int order;
+				double a,b;
+				matrix m;
+				string name;
+				cout << "Please input the name:"<<endl;
+				cin >> name;
+				cout << "Please input the order:" << endl;
+				cin >> order;
+				cout << "Please input the lower bound:" << endl;
+				cin >> a;
+				cout << "Please input the upper bound:" << endl;
+				cin >> b;
+				m.matrix_create_diagonal(order,a,b);
+				m.matrix_modify_name(name);
+				m.matrix_store();
+				m.matrix_display(1,1);
+			}
+			else if(choice == 3) {
+				int order;
+				double a,b;
+				matrix m;
+				string name;
+				cout << "Please input the name:"<<endl;
+				cin >> name;
+				cout << "Please input the order:" << endl;
+				cin >> order;
+				cout << "Please input the lower bound:" << endl;
+				cin >> a;
+				cout << "Please input the upper bound:" << endl;
+				cin >> b;
+				m.matrix_create_upper_triangular(order,a,b);
+				m.matrix_modify_name(name);
+				m.matrix_store();
+				m.matrix_display(1,1);
+			}
+			else if(choice == 4) {
+				int order;
+				string name;
+				cout << "Please input the name:"<<endl;
+				cin >> name;
+				cout << "Please input the order:" << endl;
+				cin >> order;
+				matrix m;
+				m.matrix_cin_diagonal(order);
+				m.matrix_modify_name(name);
+				m.matrix_store();
+				m.matrix_display(1,1);
+			}
+			else if(choice == 5) {
+				int order;
+				string name;
+				int k;
+				cout << "Please input the name:"<<endl;
+				cin >> name;
+				cout << "Please input the order:" << endl;
+				cin >> order;
+				cout << "Please input the value on the diagonal:" << endl;
+				cin >> k;
+				matrix m;
+				m.matrix_scalar(order,k);
+				m.matrix_modify_name(name);
+				m.matrix_store();
+				m.matrix_display(1,1);
+			}
+			else if(choice == 6) {
+				string name;
+				cout << "Please input the name of the argumented matrix."<<endl;
+				cin >> name;
+				cout << "Please input the name of the tow matrixes you want to create an argumented matrix:"<<endl;
+				string name1,name2;
+				cin >> name1;
+				cin >> name2;
+				matrix m;
+				m.create_argumentation(matlist[matrix_search(name1)],matlist[matrix_search(name2)]);
+				m.matrix_modify_name(name);
+				m.matrix_store();
+			}
+			else if(choice == 0) {
+				return;
+			}
+			else {
+				cout << "Wrong input, please input the correct choice:"<<endl;
+			}
+
+	}
+}
+
+void adjoint() {
+	cout << "Please input the name of the matrix:"<<endl;
+	string name;
+	cin >> name;
+	cout << "Please input the new name of the matrix:"<<endl;
+	string newname;
+	cin >> newname;
+	matrix m;
+	m=matlist[matrix_search(name)].matrix_adjoint();
+	m.matrix_modify_name(name);
+	m.matrix_store();
+}
+
+// Ãû³Æ£ºmatrix_create Éú³Éº¯Êı£¨Áã¾ØÕó£©
+// ¹¦ÄÜ£ºÉú³ÉÒÑÖªĞĞºÍÁĞµÄÁã¾ØÕó
+// ²ÎÊı£ºĞĞ£¬ÁĞ
+void matrix::matrix_create(int r, int c) {//´Ë´¦Ä¬ÈÏÖµ¶¼Îª0
 	row = r;
 	col = c;
-	data = new double *[row];//ç”³è¯·rowä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´ 
+	data = new fraction *[row];//ÉêÇërow¸öÊı×éÖ¸Õë¿Õ¼ä
 	if (!data) {
     	cout << "Error: memory is full" << endl;
-		return; 
+		return;
 	}
 	for (int i = 0; i < row; i++) {
-		data[i] = new double [col];//ç”³è¯·colä¸ªæ•°ç»„æŒ‡é’ˆç©ºé—´
+		data[i] = new fraction [col];//ÉêÇëcol¸öÊı×éÖ¸Õë¿Õ¼ä
 		if (!data[i]) {
     		cout << "Error: memory is full" << endl;
-			return; 
+			return;
 		}
     }
 	for (int i = 0; i < row; i++){
@@ -32,9 +165,9 @@ void matrix::matrix_create(int r, int c) {//æ­¤å¤„é»˜è®¤å€¼éƒ½ä¸º0
 	}
 }
 
-// åç§°ï¼šmatrix_create_1 ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ1ï¼‰
-// åŠŸèƒ½ï¼šè·å¾—ç¬¬ä¸€ç±»åˆç­‰çŸ©é˜µ E(i,j)
-// å‚æ•°ï¼šorderï¼šçŸ©é˜µé˜¶æ•° 	r,c: rè¡Œcåˆ—
+// Ãû³Æ£ºmatrix_create_1 Éú³Éº¯Êı£¨³õµÈ¾ØÕó1£©
+// ¹¦ÄÜ£º»ñµÃµÚÒ»Àà³õµÈ¾ØÕó E(i,j)
+// ²ÎÊı£ºorder£º¾ØÕó½×Êı 	r,c: rĞĞcÁĞ
 void matrix::matrix_create_1 (int order, int i, int j) {
     int c = i - 1, r = j - 1;
     matrix_create(order, order);
@@ -47,9 +180,9 @@ void matrix::matrix_create_1 (int order, int i, int j) {
     }
 }
 
-// åç§°ï¼šmatrix_create_E ç”Ÿæˆå‡½æ•°ï¼ˆå•ä½çŸ©é˜µï¼‰
-// åŠŸèƒ½ï¼šè·å¾—ç¬¬ä¸€ç±»åˆç­‰çŸ©é˜µ E(i,j)
-// å‚æ•°ï¼šorderï¼šçŸ©é˜µé˜¶æ•° 	r,c: rè¡Œcåˆ—
+// Ãû³Æ£ºmatrix_create_E Éú³Éº¯Êı£¨µ¥Î»¾ØÕó£©
+// ¹¦ÄÜ£º»ñµÃµÚÒ»Àà³õµÈ¾ØÕó E(i,j)
+// ²ÎÊı£ºorder£º¾ØÕó½×Êı 	r,c: rĞĞcÁĞ
 void matrix::matrix_create_E (int order) {
     matrix_create(order, order);
     for (int i = 0; i < order; i++) {
@@ -57,10 +190,10 @@ void matrix::matrix_create_E (int order) {
     }
 }
 
-// åç§°ï¼šmatrix_create_2 ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ2ï¼‰
-// åŠŸèƒ½ï¼šè·å¾—ç¬¬äºŒç±»åˆç­‰çŸ©é˜µ E(i(k))
-// å‚æ•°ï¼šorder: çŸ©é˜µé˜¶æ•°  	r:rè¡Œ 		k: kå€
-void matrix::matrix_create_2 (int order, int i, double k) {
+// Ãû³Æ£ºmatrix_create_2 Éú³Éº¯Êı£¨³õµÈ¾ØÕó2£©
+// ¹¦ÄÜ£º»ñµÃµÚ¶şÀà³õµÈ¾ØÕó E(i(k))
+// ²ÎÊı£ºorder: ¾ØÕó½×Êı  	r:rĞĞ 		k: k±¶
+void matrix::matrix_create_2 (int order, int i, fraction k) {
     int r = i - 1;
 	matrix_create(order, order);
     for (int i = 0; i < order; i++) {
@@ -73,10 +206,10 @@ void matrix::matrix_create_2 (int order, int i, double k) {
     }
 }
 
-// åç§°ï¼šmatrix_create_3 ç”Ÿæˆå‡½æ•°ï¼ˆåˆç­‰çŸ©é˜µ3ï¼‰
-// åŠŸèƒ½ï¼šè·å–ç¬¬ä¸‰ç±»åˆç­‰çŸ©é˜µE(i,j(k))
-// å‚æ•°ï¼šorderï¼šçŸ©é˜µé˜¶æ•°		r,c:rè¡Œcåˆ— 		kï¼škå€
-void matrix::matrix_create_3 (int order, int i, int j, double k) {
+// Ãû³Æ£ºmatrix_create_3 Éú³Éº¯Êı£¨³õµÈ¾ØÕó3£©
+// ¹¦ÄÜ£º»ñÈ¡µÚÈıÀà³õµÈ¾ØÕóE(i,j(k))
+// ²ÎÊı£ºorder£º¾ØÕó½×Êı		r,c:rĞĞcÁĞ 		k£ºk±¶
+void matrix::matrix_create_3 (int order, int i, int j, fraction k) {
     int r = i - 1, c = j - 1;
     matrix_create(order, order);
     for (int i = 0; i < order; i++) {
@@ -88,51 +221,79 @@ void matrix::matrix_create_3 (int order, int i, int j, double k) {
 	}
 }
 
-void matrix::matrix_create_random(int i, int j,double a,double b) {
+//Ãû³Æ£º matrix_create_random Éú³Éº¯Êı£¨Ëæ»ú¾ØÕó£©
+//¹¦ÄÜ£ºËæ»úÉú³É¾ØÕó
+//²ÎÊı£ºi,j:ĞĞÁĞÊı  a,b:Ëæ»úÉú³ÉÖµµÄ·¶Î§
+void matrix::matrix_create_random(int i, int j, double a, double b) {
 	srand(time(NULL));
     matrix_create(i,j);
     for(int k=0;k<row;k++) {
         for(int l=0;l<col;l++) {
-            data[k][l]=a+(b-a)*rand()/((double) RAND_MAX);
+            data[k][l]= fraction(a) + fraction((b - a) * rand(), RAND_MAX);
         }
     }
 }
 
-//åç§°ï¼š matrix_create_diagonal ç”Ÿæˆå‡½æ•°ï¼ˆå¯¹è§’çŸ©é˜µï¼‰
-//åŠŸèƒ½ï¼šéšæœºç”Ÿæˆå¯¹è§’çŸ©é˜µ
-//å‚æ•°ï¼ši,j:è¡Œåˆ—æ•°  a,b:éšæœºç”Ÿæˆå€¼çš„èŒƒå›´ 
-void matrix::matrix_create_diagonal(int i, int j, double a, double b) {
-	if (i != j) {
-        cout << "Error: Diagonal matrix must be square" << endl;
-        return;
-    }
+//Ãû³Æ£º matrix_create_diagonal Éú³Éº¯Êı£¨¶Ô½Ç¾ØÕó£©
+//¹¦ÄÜ£ºËæ»úÉú³É¶Ô½Ç¾ØÕó
+//²ÎÊı£ºi:ĞĞÁĞÊı  a,b:Ëæ»úÉú³ÉÖµµÄ·¶Î§
+void matrix::matrix_create_diagonal(int i, int a, int b) {
+	if (a > b) swap(a, b);
 	srand(time(NULL));
-	matrix_create(i, j);
+	matrix_create(i, i);
 	for (int k = 0; k < row; k++) {
-		for (int l = 0; l < col; l++) {
-			if (k == l) {
-				data[k][l] = a + (b - a) * rand() / ((double)RAND_MAX);
-			}
+		int num = a + rand() % (b - a + 1);
+		int dem= a + rand() % (b - a + 1);
+		while (dem == 0) {
+			dem = a + rand() % (b - a + 1);
 		}
+		data[k][k] = fraction(num, dem);
 	}
 }
 
-//åç§°ï¼š matrix_create_upper_triangular ç”Ÿæˆå‡½æ•°ï¼ˆä¸Šä¸‰è§’çŸ©é˜µï¼‰
-//åŠŸèƒ½ï¼šéšæœºç”Ÿæˆä¸Šä¸‰è§’çŸ©é˜µ
-//å‚æ•°ï¼ši,j:è¡Œåˆ—æ•°  a,b:éšæœºç”Ÿæˆå€¼çš„èŒƒå›´ 
-void matrix::matrix_create_upper_triangular(int i, int j, double a, double b) {
-	if (i != j) {
-        cout << "Error: Diagonal matrix must be square" << endl;
-        return;
-    }
+//Ãû³Æ£º matrix_create_upper_triangular Éú³Éº¯Êı£¨ÉÏÈı½Ç¾ØÕó£©
+//¹¦ÄÜ£ºËæ»úÉú³ÉÉÏÈı½Ç¾ØÕó
+//²ÎÊı£ºi:ĞĞÁĞÊı  a,b:Ëæ»úÉú³ÉÖµµÄ·¶Î§
+void matrix::matrix_create_upper_triangular(int i, int a, int b) {
+	if (a > b) swap(a, b);
 	srand(time(NULL));
-	matrix_create(i, j);
+	matrix_create(i, i);
 	for (int k = 0; k < row; k++) {
 		for (int l = 0; l < col; l++) {
 			if (k <= l) {
-				data[k][l]= a + (b - a) * rand() / ((double)RAND_MAX);
+				int num = a + rand() % (b - a + 1);
+				int dem = a + rand() % (b - a + 1);
+				while (dem == 0) {
+					dem = a + rand() % (b - a + 1);
+				}
+				data[k][l] = fraction(num, dem);
 			}
 		}
 	}
 }
 
+//Ãû³Æ£º matrix_cin_diagonal
+//¹¦ÄÜ£ºÉú³É¶Ô½ÇÏßÉÏÔªËØÎªÓÃ»§ÊäÈëµÄÊıµÄ¶Ô½Ç¾ØÕó
+//²ÎÊı£ºi:ĞĞÁĞÊı
+void matrix::matrix_cin_diagonal(int i) {
+	fraction* diag;
+	diag = new fraction[i];
+	for (int j = 0; j < i; j++) {
+		cin >> diag[j];
+	}
+	matrix_create(i, i);
+	for (int k = 0; k < row; k++) {
+		data[k][k] = diag[k];
+	}
+	delete[] diag;
+}
+
+//Ãû³Æ£º matrix_scalar
+//¹¦ÄÜ£ºÉú³É¶Ô½ÇÏßÉÏÔªËØÎªkµÄÊıÁ¿¾ØÕó
+//²ÎÊı£ºi:ĞĞÁĞÊı  k£º¶Ô½ÇÏßÉÏµÄÔªËØÖµ
+void matrix::matrix_scalar(int i, fraction k) {
+	matrix_create(i, i);
+	for (int l = 0; l < row; l++) {
+		data[l][l] = k;
+	}
+}
